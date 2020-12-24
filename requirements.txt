@@ -1,0 +1,7 @@
+PyDirectInput
+PYXInput
+pyautogui
+flask-socketio
+Flask
+websockets
+pyvjoy
