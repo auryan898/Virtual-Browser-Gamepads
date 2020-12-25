@@ -36,6 +36,8 @@ VueJS for other logistical elements:
 
 ## Final Steps for Implementation
 
+0. Change entire setup to event based instead of polling based
+
 1. Create Host PC UI for choosing assignable players at the minimum
 
 2. Remove hardcoded value of 'ryan' from everything, and make it dynamic. Use a short 6-code UID

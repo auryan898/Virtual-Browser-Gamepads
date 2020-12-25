@@ -38,6 +38,11 @@ Joystick Controls.
     <div id="button12">button12</div>
     <div id="button13">button13</div>
 
+    <div id="dpad_up_s">dpad_up</div>
+    <div id="dpad_down_s">dpad_down</div>
+    <div id="dpad_right_s">dpad_right</div>
+    <div id="dpad_left_s">dpad_left</div>
+
     <div id="gamepad-data">gamepad data</div>
     <button onclick="promptChosenName()">Set your Chosen Name</button>
     <button onclick="setupWebSocket()">Connect to Server</button>
@@ -75,6 +80,12 @@ Joystick Controls.
 <button class="bg-grey rectangular-shape-small" style="position:absolute; left: 280px; top: 480px;" id="button-start">start</button>
 <button class="bg-grey circular-shape" style="position:absolute; left: 10px; top: 570px;" id="button-guide">O</button>
 
+<button class="bg-grey square-shape" style="position:absolute; left: 100px; top: 570px;" id="dpad_up">UP</button>
+<button class="bg-grey square-shape" style="position:absolute; left: 190px; top: 570px;" id="dpad_down">DWN</button>
+<button class="bg-grey square-shape" style="position:absolute; left: 280px; top: 570px;" id="dpad_right">RGT</button>
+<button class="bg-grey square-shape" style="position:absolute; left: 370px; top: 570px;" id="dpad_left">LFT</button>
+
+
 <style>
     .status-text {
         margin-left: 360px;
@@ -95,6 +106,13 @@ Joystick Controls.
         width: 80px;
         font-size: 40px;
         border-radius: 10%;
+    }
+    .square-shape {
+        height:60px;
+        width: 60px;
+        font-size: 20px;
+        border-radius: 10%;
+        text-align: center;
     }
     .rectangular-shape-small {
         height:50px;
@@ -163,8 +181,12 @@ class JoystickController
             // if this is a touch event, keep track of which one
             if (event.changedTouches)
                 self.touchId = event.changedTouches[0].identifier;
+            
+            sendGamepadData();
         }
         
+        this.updateIndex = 0;
+        this.updateInterval = 20;
         function handleMove(event) 
         {
             if ( !self.active ) return;
@@ -187,6 +209,8 @@ class JoystickController
                 if (touchmoveId == null) return;
             }
 
+            
+
             const xDiff = event.clientX - self.dragStart.x;
             const yDiff = event.clientY - self.dragStart.y;
             const angle = Math.atan2(yDiff, xDiff);
@@ -205,6 +229,12 @@ class JoystickController
             const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(4));
             
             self.value = { x: xPercent, y: yPercent };
+
+            self.updateIndex++;
+            if (self.updateIndex >= self.updateInterval) {
+                sendGamepadData();
+                self.updateIndex = 0;
+            }
           }
 
         function handleUp(event) 
@@ -222,6 +252,7 @@ class JoystickController
             self.value = { x: 0, y: 0 };
             self.touchId = null;
             self.active = false;
+            sendGamepadData();
         }
 
         stick.addEventListener('mousedown', handleDown);
@@ -252,6 +283,8 @@ class ButtonController {
             // if this is a touch event, keep track of which one
             if (event.changedTouches)
                 self.touchId = event.changedTouches[0].identifier;
+            
+            sendGamepadData();
         }
         function handleUp(event)
         {
@@ -261,6 +294,7 @@ class ButtonController {
             if (event.changedTouches && self.touchId != event.changedTouches[0].identifier) return;
             self.touchId = null;
             self.active = false;
+            sendGamepadData();
         }
         button.addEventListener('mousedown', handleDown);
         button.addEventListener('touchstart', handleDown);
@@ -290,6 +324,17 @@ let button11 = new ButtonController("button-back")
 let button12 = new ButtonController("button-start")
 let button13 = new ButtonController("button-guide")
 
+let dpad_up = new ButtonController("dpad_up")
+let dpad_down = new ButtonController("dpad_down")
+let dpad_right = new ButtonController("dpad_right")
+let dpad_left = new ButtonController("dpad_left")
+
+let data = {}
+let socket = null;
+let brokerUri = 'localhost:5000'
+let uid = randUID(6); // 6 length hex code
+let chosenName = '';
+
 function getButtonData() {
     return {
         'a': button1.isActive() ? 1 : 0,
@@ -313,9 +358,12 @@ function getButtonData() {
         'ly': parseInt(-(joystick1.value.y * 16384) + 16384),
         'rx': parseInt((joystick2.value.x * 16384) + 16384),
         'ry': parseInt(-(joystick2.value.y * 16384) + 16384),
+
+        'hx': 16384 + (dpad_up.isActive() ? 16384: 0) - (dpad_down.isActive() ? 16384 : 0),
+        'hy': 16384 + (dpad_right.isActive() ? 16384 : 0) - (dpad_left.isActive() ? 16384 : 0),
     }
 }
-let data = {}
+
 function update()
 {
     document.getElementById("status1").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
@@ -337,13 +385,16 @@ function update()
     document.getElementById("button11").innerText = "button11: " + button11.isActive();
     document.getElementById("button12").innerText = "button12: " + button12.isActive();
     document.getElementById("button13").innerText = "button13: " + button13.isActive();
+
+    document.getElementById("dpad_up_s").innerText = "dpad_up: " + dpad_up.isActive();
+    document.getElementById("dpad_down_s").innerText = "dpad_down: " + dpad_down.isActive();
+    document.getElementById("dpad_right_s").innerText = "dpad_right: " + dpad_right.isActive();
+    document.getElementById("dpad_left_s").innerText = "dpad_left: " + dpad_left.isActive();
     
     data = (getButtonData());
     document.getElementById("gamepad-data").innerText = "gamepad data: " + JSON.stringify(data);
-    
 }
-let socket = null;
-let brokerUri = 'localhost:5000'
+
 function promptServerName() {
     name = prompt("Choose a name to identify your gamepad:")
     if (name == "null" || !name) {
@@ -363,6 +414,7 @@ function setupWebSocket() {
             }
             socket.onopen = function(ev) {
                 console.log("WebSocket open.")
+                sendGamepadData()
             }
         } catch (e) {
             socket = null;
@@ -370,7 +422,7 @@ function setupWebSocket() {
     }
 }
 
-let uid = randUID(6); // 6 length hex code
+
 function randInt(a,b) { // a to b inclusive
     return Math.floor(Math.random(new Date().getTime()) * (b - a + 1)) + a
 }
@@ -381,7 +433,7 @@ function randUID(length) {
     return res
 }
 
-let chosenName = '';
+
 function promptChosenName() {
     name = prompt("Choose a name to identify your gamepad:")
     if (name == "null" || !name) {
@@ -391,16 +443,19 @@ function promptChosenName() {
 }
 promptChosenName();
 
+function sendGamepadData() {
+    update();
+    if (socket == null || socket.readyState == socket.CLOSED) {
+    
+    } else if (socket.readyState == socket.OPEN) { // socket open and connected
+        socket.send(JSON.stringify({'ID': chosenName, 'gamepad':data}));
+    }
+}
+
 function loop()
 {
     setTimeout(function() {
-        update();
-        if (socket == null || socket.readyState == socket.CLOSED) {
-            
-        } else if (socket.readyState == socket.OPEN) { // socket open and connected
-            socket.send(JSON.stringify({'ID': chosenName, 'gamepad':data}));
-        }
-        requestAnimationFrame(loop);
+        // requestAnimationFrame(loop);
     }, 100);
 }
 
