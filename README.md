@@ -36,13 +36,13 @@ VueJS for other logistical elements:
 
 ## Final Steps for Implementation
 
-1. Host Broker server on heroku, and also put up the client gamepad somewhere
+1. Create Host PC UI for choosing assignable players at the minimum
 
-2. Finish client gamepad UI and organization. Add name selector button, and possibly just a settings button
+2. Remove hardcoded value of 'ryan' from everything, and make it dynamic. Use a short 6-code UID
 
-3. Create Host PC UI for choosing assignable players at the minimum
+3. Host Broker server on heroku, and also put up the client gamepad somewhere
 
-4. Remove hardcoded value of 'ryan' from everything, and make it dynamic. Use a short 6-code UID
+4. Finish client gamepad UI and organization. Add name selector button, and possibly just a settings button
 
 5. (optional) Optimize client remote gamepad update loop (probably modulo something)
 
