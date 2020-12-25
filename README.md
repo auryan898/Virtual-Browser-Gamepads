@@ -19,6 +19,7 @@ Flask and Flask-SocketIO for the server.
 PhaserJS for the joystick client GUI, of remote gamepads.
 - [PhaserJS](https://phaser.io/)
 - [PhaserJS VirtualGamepad](https://github.com/ShawnHymel/phaser-plugin-virtual-gamepad)
+- [Touch-enabled Virtual JoyStick](https://www.cssscript.com/touch-joystick-controller/)
 
 VueJS for other logistical elements:
 - [VueJS](https://vuejs.org/)
