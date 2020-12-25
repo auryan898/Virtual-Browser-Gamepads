@@ -1,6 +1,7 @@
 import asyncio
 import websockets
 import json
+import time
 
 from gamepad_driver import GamepadAssigner
 
@@ -42,7 +43,7 @@ async def gamepad_listening(uri, host_name, run_forever=-1):
 
             resp = await websocket.recv()
             assigner.update_gamers_json(json.loads(resp))
-
+            time.sleep(0.1)
             if run_forever > 0: # <0 for forever, >=0 for that many iterations
                 run_forever -= 1
 
@@ -64,5 +65,5 @@ if __name__=='__main__':
         import doctest
         doctest.testmod()
     assigner = GamepadAssigner.get_assigner()
-    assigner.set_vjoy_gamer('ryan',1)
+    assigner.set_vjoy_gamer('ryan',2)
     main_ws() # run host pc websocket client

@@ -39,6 +39,9 @@ Joystick Controls.
     <div id="button13">button13</div>
 
     <div id="gamepad-data">gamepad data</div>
+    <button onclick="promptChosenName()">Set your Chosen Name</button>
+    <button onclick="setupWebSocket()">Connect to Server</button>
+    <button onclick="promptServerName()">Change Server name</button>
 </div>
 
 <hr>
@@ -340,33 +343,65 @@ function update()
     
 }
 let socket = null;
-
-function setupWebSocket() {
-    try {
-        socket = new WebSocket('ws://localhost:5000/clients');
-        socket.onmessage = function(msg) {
-            console.log(msg);
-        }
-        socket.onclose = function(ev) {
-            console.log("WebScoket closed.");
-        }
-        socket.onopen = function(ev) {
-            console.log("WebSocket open.")
-        }
-    } catch (e) {
-        socket = null;
-    } 
+let brokerUri = 'localhost:5000'
+function promptServerName() {
+    name = prompt("Choose a name to identify your gamepad:")
+    if (name == "null" || !name) {
+        name = '';
+    } else {
+        brokerUri = name;
+    }
 }
+function setupWebSocket() {
+    if (socket == null || socket.readyState == socket.CLOSED) {
+        try {
+            socket = new WebSocket('ws://'+ brokerUri +'/clients');
+            socket.onmessage = function(msg) {
+            }
+            socket.onclose = function(ev) {
+                console.log("WebScoket closed.");
+            }
+            socket.onopen = function(ev) {
+                console.log("WebSocket open.")
+            }
+        } catch (e) {
+            socket = null;
+        } 
+    }
+}
+
+let uid = randUID(6); // 6 length hex code
+function randInt(a,b) { // a to b inclusive
+    return Math.floor(Math.random(new Date().getTime()) * (b - a + 1)) + a
+}
+
+function randUID(length) {
+    let res = '';
+    for (let i = 0; i < length; i++) res += randInt(0, 15).toString(16);
+    return res
+}
+
+let chosenName = '';
+function promptChosenName() {
+    name = prompt("Choose a name to identify your gamepad:")
+    if (name == "null" || !name) {
+        name = '';
+    }
+    chosenName = name;
+}
+promptChosenName();
 
 function loop()
 {
-    requestAnimationFrame(loop);
-    update();
-    if (socket == null || socket.readyState == socket.CLOSED) {
-        setupWebSocket();
-    } else if (socket.readyState == socket.OPEN) { // socket open and connected
-        socket.send(JSON.stringify({'ID':'ryan' , 'gamepad':data}));
-    }
+    setTimeout(function() {
+        update();
+        if (socket == null || socket.readyState == socket.CLOSED) {
+            
+        } else if (socket.readyState == socket.OPEN) { // socket open and connected
+            socket.send(JSON.stringify({'ID': chosenName, 'gamepad':data}));
+        }
+        requestAnimationFrame(loop);
+    }, 100);
 }
 
 (function(){
