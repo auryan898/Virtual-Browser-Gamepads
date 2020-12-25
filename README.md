@@ -12,11 +12,13 @@ Host PC to add gamepads to, using the following gamepad emulation libraries:
 - [pyvjoy](https://github.com/tidzo/pyvjoy)
 
 Flask and Flask-SocketIO for the server.
-- [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/)
+- [Flask-Sockets]()
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+- [(deprecated) Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/)
 
 PhaserJS for the joystick client GUI, of remote gamepads.
 - [PhaserJS](https://phaser.io/)
+- [PhaserJS VirtualGamepad](https://github.com/ShawnHymel/phaser-plugin-virtual-gamepad)
 
 VueJS for other logistical elements:
 - [VueJS](https://vuejs.org/)
