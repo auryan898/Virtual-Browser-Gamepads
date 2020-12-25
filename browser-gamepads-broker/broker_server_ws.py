@@ -7,29 +7,40 @@ app.config['SECRET_KEY'] = 'ryanIsSecret'
 sockets = Sockets(app)
 
 GAMEPAD_DATA = {} # Contains names of gamer IDs
+ASSIGNMENTS = {}
 
 @sockets.route('/hosts')
 def handle_pc_host(ws): # { host_name: str, assigned_gamers}
     while not ws.closed:
         obj = json.loads(ws.receive())
         print('received json '+ str(obj))
-        ws.send(generate_host_data(obj['assignments']))
+        ws.send(generate_host_data(obj['assignments'], obj['host_name']))
         print('send json ' + str(generate_host_data(obj['assignments'])))
 
-def generate_host_data(assignments) -> dict:
+def generate_host_data(assignments, host_name) -> dict:
     '''(dict) -> dict
     Creates the gamepad data dict based on the given assignments, ex. {'ryan':1,'bob':0}, returned as 
     {'ryan':gamepad_data, 'bob':None}, only for assignments between [1,4] inclusive.
     '''
     result = {}
-    for key,value in assignments.items():
-        if value >= 1 and value <= 4 and key in GAMEPAD_DATA:
-            result[key] = GAMEPAD_DATA[key]
+    for gamerID, stick_num in assignments.items():
+        if stick_num >= 1 and stick_num <= 4 and gamerID in GAMEPAD_DATA:
+            result[gamerID] = GAMEPAD_DATA[gamerID]
+        ASSIGNMENTS[gamerID] = {'stick_num':stick_num, 'host_name':host_name}
     return json.dumps(result)
 
 @sockets.route('/clients')
-def handle_gamepad_client(obj):
-    print('received json:' + str(obj))
+def handle_gamepad_client(ws):
+    '''
+    Expects a json of {gamepad: gamepadData, ID: gamerID}
+    '''
+    while not ws.closed:
+        obj = json.loads(ws.receive())
+        for key, data in obj['gamepad'].items():
+            GAMEPAD_DATA[key] = data
+        assignment = ASSIGNMENTS.get(obj['ID'], None)
+        if assignment and 'stick_num' in assignment and 'host_name' in assignment:
+            ws.send({'controller_assignment': assignment['stick_num'], 'connected_host': assignment['host_name']})
 
 @app.route('/')
 def hello():

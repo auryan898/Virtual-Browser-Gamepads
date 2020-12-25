@@ -26,8 +26,8 @@ async def gamepad_listening(uri, host_name, run_forever=-1):
     >>> tasks[1] = websockets.serve(hello, "localhost", 8765)
     >>> tasks[0] = gamepad_listening('ws://localhost:8765','ryan pc', 2)
     >>> _ = loop.run_until_complete(asyncio.wait(tasks))
-    {"hostName": "ryan pc", "assignments": {"ryan": 3}}
-    {"hostName": "ryan pc", "assignments": {"ryan": 3}}
+    {"host_name": "ryan pc", "assignments": {"ryan": 3}}
+    {"host_name": "ryan pc", "assignments": {"ryan": 3}}
     >>> time.sleep(5)
     '''
     
@@ -37,7 +37,7 @@ async def gamepad_listening(uri, host_name, run_forever=-1):
         while True:
             if run_forever == 0:
                 break
-            data = json.dumps({ 'hostName': host_name, 'assignments': assigner.vjoy_gamer_id })
+            data = json.dumps({ 'host_name': host_name, 'assignments': assigner.vjoy_gamer_id })
             await websocket.send(data)
 
             resp = await websocket.recv()
