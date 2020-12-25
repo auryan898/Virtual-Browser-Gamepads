@@ -1,14 +1,14 @@
 import asyncio
 import websockets
+import socketio
 import json
 
 from gamepad_driver import GamepadAssigner
 
+DEBUG = False
+
 async def gamepad_listening(uri, host_name, run_forever=-1):
     '''
-    >> start_server = websockets.serve(hello, "localhost", 8765)
-    >> start_client = gamepad_listening('ws://localhost:8765','ryan pc', run_forever=2)
-
     >>> import asyncio, websockets, time, json
     >>> a = GamepadAssigner.get_assigner()
     >>> a.set_vjoy_gamer('ryan', 3)
@@ -46,8 +46,53 @@ async def gamepad_listening(uri, host_name, run_forever=-1):
 
             if run_forever > 0: # <0 for forever, >=0 for that many iterations
                 run_forever -= 1
-            
+
+def gamepad_listening_socketio(uri, host_name, run_forever=-1):
+    ''''''
+    assigner = GamepadAssigner.get_assigner()
+    sio = socketio.Client()
+
+    sio.connect(uri)
+    @sio.on('json')
+    def receive_gamepad_data(obj):
+        assigner.update_gamers_json(obj)
+
+    while True:
+        if run_forever == 0:
+            break
+        sio.emit('json', { 
+            'hostName': host_name, 
+            'assignments': assigner.vjoy_gamer_id 
+            })
+        time.sleep(0.1)
+        if run_forever > 0: # <0 for forever, >=0 for that many iterations
+            run_forever -= 1
+
+def main_socketio():
+    config = None
+    with open('host_pc_config.json','r') as f:
+        config = json.load(f)
+        print(config)
+    gamepad_listening_socketio(config['broker_uri'], config['host_name'])
+
+def main_ws():
+    config = None
+    with open('host_pc_config.json','r') as f:
+        config = json.load(f)
+        print(config)
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(gamepad_listening(config['broker_uri'], config['host_name'])) # 'ws://localhost:8765'
+    except KeyboardInterrupt:
+        pass
+    finally:
+        loop.close()
 
 if __name__=='__main__':
-    import doctest
-    doctest.testmod()
+    if DEBUG:
+        import doctest
+        doctest.testmod()
+    # main_socketio() 
+    assigner = GamepadAssigner.get_assigner()
+    assigner.set_vjoy_gamer('ryan',1)
+    main_ws() # run host pc websocket client

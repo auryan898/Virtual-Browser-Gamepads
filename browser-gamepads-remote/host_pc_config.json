@@ -1,0 +1,4 @@
+{
+    "broker_uri":"ws://localhost:5000/hosts",
+    "host_name":"ryan pc"
+}

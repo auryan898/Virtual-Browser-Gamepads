@@ -1,3 +1,4 @@
+python-socketio==5.0.3
 PyDirectInput
 PYXInput
 pyautogui
@@ -5,3 +6,4 @@ flask-socketio
 Flask
 websockets
 pyvjoy
+Flask-Sockets
