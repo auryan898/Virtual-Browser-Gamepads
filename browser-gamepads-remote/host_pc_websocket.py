@@ -1,6 +1,5 @@
 import asyncio
 import websockets
-import socketio
 import json
 
 from gamepad_driver import GamepadAssigner
@@ -47,34 +46,6 @@ async def gamepad_listening(uri, host_name, run_forever=-1):
             if run_forever > 0: # <0 for forever, >=0 for that many iterations
                 run_forever -= 1
 
-def gamepad_listening_socketio(uri, host_name, run_forever=-1):
-    ''''''
-    assigner = GamepadAssigner.get_assigner()
-    sio = socketio.Client()
-
-    sio.connect(uri)
-    @sio.on('json')
-    def receive_gamepad_data(obj):
-        assigner.update_gamers_json(obj)
-
-    while True:
-        if run_forever == 0:
-            break
-        sio.emit('json', { 
-            'hostName': host_name, 
-            'assignments': assigner.vjoy_gamer_id 
-            })
-        time.sleep(0.1)
-        if run_forever > 0: # <0 for forever, >=0 for that many iterations
-            run_forever -= 1
-
-def main_socketio():
-    config = None
-    with open('host_pc_config.json','r') as f:
-        config = json.load(f)
-        print(config)
-    gamepad_listening_socketio(config['broker_uri'], config['host_name'])
-
 def main_ws():
     config = None
     with open('host_pc_config.json','r') as f:
@@ -92,7 +63,6 @@ if __name__=='__main__':
     if DEBUG:
         import doctest
         doctest.testmod()
-    # main_socketio() 
     assigner = GamepadAssigner.get_assigner()
     assigner.set_vjoy_gamer('ryan',1)
     main_ws() # run host pc websocket client
