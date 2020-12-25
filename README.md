@@ -34,3 +34,18 @@ VueJS for other logistical elements:
 
 4. Implement a better gamepad client GUI to be served by the server.
 
+## Final Steps for Implementation
+
+1. Host Broker server on heroku, and also put up the client gamepad somewhere
+
+2. Finish client gamepad UI and organization. Add name selector button, and possibly just a settings button
+
+3. Create Host PC UI for choosing assignable players at the minimum
+
+4. Remove hardcoded value of 'ryan' from everything, and make it dynamic. Use a short 6-code UID
+
+5. (optional) Optimize client remote gamepad update loop (probably modulo something)
+
+6. (optional) Add more than just the vjoy controller
+
+7. (optional) Password protected gamepad and host access

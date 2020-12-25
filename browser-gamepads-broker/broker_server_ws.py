@@ -13,9 +13,10 @@ ASSIGNMENTS = {}
 def handle_pc_host(ws): # { host_name: str, assigned_gamers}
     while not ws.closed:
         obj = json.loads(ws.receive())
-        print('received json '+ str(obj))
-        ws.send(generate_host_data(obj['assignments'], obj['host_name']))
-        print('send json ' + str(generate_host_data(obj['assignments'])))
+        # print('received json '+ str(obj))
+        data = generate_host_data(obj['assignments'], obj['host_name'])
+        ws.send(data)
+        # print('send json ' + str(data))
 
 def generate_host_data(assignments, host_name) -> dict:
     '''(dict) -> dict
@@ -24,6 +25,7 @@ def generate_host_data(assignments, host_name) -> dict:
     '''
     result = {}
     for gamerID, stick_num in assignments.items():
+        stick_num = int(stick_num)
         if stick_num >= 1 and stick_num <= 4 and gamerID in GAMEPAD_DATA:
             result[gamerID] = GAMEPAD_DATA[gamerID]
         ASSIGNMENTS[gamerID] = {'stick_num':stick_num, 'host_name':host_name}
@@ -36,11 +38,13 @@ def handle_gamepad_client(ws):
     '''
     while not ws.closed:
         obj = json.loads(ws.receive())
-        for key, data in obj['gamepad'].items():
-            GAMEPAD_DATA[key] = data
+        # print(obj)
+        
+        GAMEPAD_DATA[obj['ID']] = obj['gamepad']
+        # print(ASSIGNMENTS)
         assignment = ASSIGNMENTS.get(obj['ID'], None)
         if assignment and 'stick_num' in assignment and 'host_name' in assignment:
-            ws.send({'controller_assignment': assignment['stick_num'], 'connected_host': assignment['host_name']})
+            ws.send(json.dumps({'controller_assignment': assignment['stick_num'], 'connected_host': assignment['host_name']}))
 
 @app.route('/')
 def hello():
