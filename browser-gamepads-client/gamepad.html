@@ -18,6 +18,7 @@
 Joystick Controls.
 <hr>
 <div class="status-text">
+    <div id="status">Nothing to see here.</div>
     <div id="status1" style="color: red;">Joystick 1</div>
     <div id="status2" style="color: blue;">Joystick 2</div>
     <div id="button1">Button 1</div>
@@ -407,11 +408,14 @@ function setupWebSocket() {
             }
             socket.onclose = function(ev) {
                 console.log("WebScoket closed.");
+                document.getElementById('status').innerText = 'WebSocket closed.';
             }
             socket.onopen = function(ev) {
                 console.log("WebSocket open.")
+                document.getElementById('status').innerText = 'WebSocket open.';
             }
         } catch (e) {
+            document.getElementById('status').innerText = e;
             socket = null;
         } 
     }
