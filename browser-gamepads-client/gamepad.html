@@ -186,7 +186,7 @@ class JoystickController
         }
         
         this.updateIndex = 0;
-        this.updateInterval = 20;
+        this.updateInterval = 15;
         function handleMove(event) 
         {
             if ( !self.active ) return;
@@ -213,22 +213,18 @@ class JoystickController
 
             const xDiff = event.clientX - self.dragStart.x;
             const yDiff = event.clientY - self.dragStart.y;
-            const angle = Math.atan2(yDiff, xDiff);
-            const distance = Math.min(maxDistance, Math.hypot(xDiff, yDiff));
-            const xPosition = distance * Math.cos(angle);
-            const yPosition = distance * Math.sin(angle);
+            // const angle = Math.atan2(yDiff, xDiff);
+            // const distance = Math.min(maxDistance, Math.hypot(xDiff, yDiff));
+            // const xPosition = distance * Math.cos(angle);
+            // const yPosition = distance * Math.sin(angle);
+            const xPosition0 = parseInt(Math.min(maxDistance, Math.abs(xDiff)) * Math.sign(xDiff))
+            const yPosition0 = parseInt(Math.min(maxDistance, Math.abs(yDiff)) * Math.sign(yDiff))
+            
 
             // move stick image to new position
-            stick.style.transform = `translate3d(${xPosition}px, ${yPosition}px, 0px)`;
-
-            // deadzone adjustment
-            const distance2 = (distance < deadzone) ? 0 : maxDistance / (maxDistance - deadzone) * (distance - deadzone);
-            const xPosition2 = distance2 * Math.cos(angle);
-            const yPosition2 = distance2 * Math.sin(angle);
-            const xPercent = parseFloat((xPosition2 / maxDistance).toFixed(4));
-            const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(4));
+            stick.style.transform = `translate3d(${xPosition0}px, ${yPosition0}px, 0px)`;
             
-            self.value = { x: xPercent, y: yPercent };
+            self.value = { x: xPosition0, y: yPosition0};
 
             self.updateIndex++;
             if (self.updateIndex >= self.updateInterval) {
@@ -354,10 +350,10 @@ function getButtonData() {
         'st': button12.isActive() ? 1 : 0,
         'gb': button13.isActive() ? 1 : 0,
 
-        'lx': parseInt((joystick1.value.x * 16384) + 16384),
-        'ly': parseInt(-(joystick1.value.y * 16384) + 16384),
-        'rx': parseInt((joystick2.value.x * 16384) + 16384),
-        'ry': parseInt(-(joystick2.value.y * 16384) + 16384),
+        'lx': parseInt( (joystick1.value.x << 8) + 16384),
+        'ly': parseInt(-(joystick1.value.y << 8) + 16384),
+        'rx': parseInt( (joystick2.value.x << 8) + 16384),
+        'ry': parseInt(-(joystick2.value.y << 8) + 16384),
 
         'hx': 16384 + (dpad_up.isActive() ? 16384: 0) - (dpad_down.isActive() ? 16384 : 0),
         'hy': 16384 + (dpad_right.isActive() ? 16384 : 0) - (dpad_left.isActive() ? 16384 : 0),
@@ -414,7 +410,6 @@ function setupWebSocket() {
             }
             socket.onopen = function(ev) {
                 console.log("WebSocket open.")
-                sendGamepadData()
             }
         } catch (e) {
             socket = null;
