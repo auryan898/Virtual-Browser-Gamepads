@@ -1,6 +1,16 @@
-# Browser Gamepads
+# Virtual Browser Gamepads
 
-Browser gamepads is an quick project that allows you to use any device that can access the internet to connect to a Windows computer as a gamepad. There are other remote control solutions, however they are too clunky, and provide far too many features and complexity. This application specifically provides remote gamepads with just a set of buttons that send gamepad input signals to the remote PC.
+Virtual Browser Gamepads allows you to use any web browser on any device that can access the internet to connect to a computer as a gamepad. There are other remote gamepad solutions, however they are too feature-heavy and complex for just the purposes of playing a game. This application specifically provides a remote gamepad UI on your phone that matches that of an Xbox One controller, or a PlayStation controller, with two joysticks, four buttons on the right, a directional pad, then two buttons for the left and right shoulders each.
+
+## Installation
+
+This project is currently a work in progress, and the dependencies are going to change, such as for supporting multiple platforms for the host PC (Windows, Linux, Mac).
+
+There are three parts to this application, the "Server", the Host PC, and the remote gamepads in browser. 
+
+- The Server communicates with the Host PC and remote gamepads, managing what information needs to go to whichever device
+- Remote gamepads require no installation except navigating to a website url for each remote gamepad
+- The Host PC runs a Python script that communicates with the Server, receiving inputs from selected remote gamepads, and then using that data on virtual gamepads on the Host PC
 
 ## Project Organization
 
