@@ -5,14 +5,15 @@ Browser gamepads is an quick project that allows you to use any device that can 
 ## Project Organization
 
 Host PC to add gamepads to, using the following gamepad emulation libraries:
+- [websockets](https://websockets.readthedocs.io/en/stable/)
+- [pyvjoy](https://github.com/tidzo/pyvjoy)
+- [PySDL2 (Cross-platform Focus)](https://pypi.org/project/PySDL2/)
 - [PYXInput](https://pypi.org/project/PYXInput/)
 - [PyDirectInput](https://pypi.org/project/PyDirectInput/)
 - [PyAutoGUI](https://github.com/asweigart/pyautogui)
-- [websockets](https://websockets.readthedocs.io/en/stable/)
-- [pyvjoy](https://github.com/tidzo/pyvjoy)
 
 Flask and Flask-SocketIO for the server.
-- [Flask-Sockets]()
+- [Flask-Sockets](https://pypi.org/project/Flask-Sockets/)
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
 - [(deprecated) Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/)
 
@@ -36,18 +37,18 @@ VueJS for other logistical elements:
 
 ## Final Steps for Implementation
 
-0. Change entire setup to event based instead of polling based
+0. Change entire setup to event based instead of polling based (Client-side DONE, Host unfinished) 50%
 
-1. Create Host PC UI for choosing assignable players at the minimum
+1. Create Host PC UI for choosing assignable players at the minimum (Bare minimum DONE)
 
-2. Remove hardcoded value of 'ryan' from everything, and make it dynamic. Use a short 6-code UID
+2. Remove hardcoded value of 'ryan' from everything, and make it dynamic (DONE). Use a short 6-code UID (UNDONE)
 
-3. Host Broker server on heroku, and also put up the client gamepad somewhere
+3. --> Host Broker server on heroku, and also put up the client gamepad somewhere
 
-4. Finish client gamepad UI and organization. Add name selector button, and possibly just a settings button
+4. --> Finish client gamepad UI and organization. Add name selector button, and possibly just a settings button
 
-5. (optional) Optimize client remote gamepad update loop (probably modulo something)
+5. (optional) Optimize client remote gamepad update loop (probably modulo something) (Mostly Done)
 
-6. (optional) Add more than just the vjoy controller
+6. (optional) Add more than just the vjoy controller (Should use SDL2, for cross-platform as well)
 
 7. (optional) Password protected gamepad and host access

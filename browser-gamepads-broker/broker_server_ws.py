@@ -23,7 +23,7 @@ def generate_host_data(assignments, host_name) -> dict:
     Creates the gamepad data dict based on the given assignments, ex. {'ryan':1,'bob':0}, returned as 
     {'ryan':gamepad_data, 'bob':None}, only for assignments between [1,4] inclusive.
     '''
-    result = {}
+    result = {key:None for key in GAMEPAD_DATA}
     for gamerID, stick_num in assignments.items():
         stick_num = int(stick_num)
         if stick_num >= 1 and stick_num <= 4 and gamerID in GAMEPAD_DATA:

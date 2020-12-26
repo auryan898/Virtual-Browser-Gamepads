@@ -108,7 +108,14 @@ class GamepadAssigner(object):
         for gamer_id, data in gamer_data.items():
             self.update_vjoy_gamer_data(gamer_id, data)
 
-    def set_vjoy_gamer(self, gamer_id, stick_num):
+    def swap_vjoy_gamer(self, gamer_id):
+        # gamer not present, or not assigned, so assign it to the first thing
+        if gamer_id not in self.vjoy_gamer_id or self.vjoy_gamer_id[gamer_id] == 0:
+            self._assign_vjoy_gamer(gamer_id)
+        else:
+            # otherwise just unassign them entirely
+            self._unassign_vjoy_stick(self.vjoy_gamer_id[gamer_id])
+    def set_vjoy_gamer(self, gamer_id, stick_num=None):
         '''
         >>> import time
         >>> a = GamepadAssigner()
@@ -142,12 +149,23 @@ class GamepadAssigner(object):
             stick_num = self.vjoy_gamer_id[gamer_id]
             if stick_num >= 1 and stick_num <= 4: # valid id
                 update_vjoy(stick_num, data) # stateless function
+        else:
+            self.vjoy_gamer_id[gamer_id] = 0
 
-    def _assign_vjoy_gamer(self, gamer_id, stick_num):
+    def _assign_vjoy_gamer(self, gamer_id, stick_num=None):
+        if stick_num is None: # find the largest stick_num
+            stick_num = 5
+            for i in range(4):
+                if self.vjoy_gamer_stick[i] is None:
+                    stick_num = i+1
+                    break
+        # stick_num has been set
+        stick_num = int(stick_num)
         if stick_num >= 1 and stick_num <= 4:
             self.vjoy_gamer_id[gamer_id] = stick_num
             self.vjoy_gamer_stick[stick_num - 1] = gamer_id
     def _unassign_vjoy_stick(self, stick_num):
+        stick_num = int(stick_num)
         i = stick_num - 1 # [1,4] -> [0,3]
         if i > 3 or i < 0:
             return False
