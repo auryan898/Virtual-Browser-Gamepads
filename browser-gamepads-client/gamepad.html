@@ -53,15 +53,15 @@
       <div class="gamepad-group-leftstick">
         <div
           style="
-            border: 1px solid rgb(5, 4, 4);
+            
             width: 128px;
             position: absolute;
             left: 10px;
             top: 150px;
           "
         >
-          <img src="images/joystick-base.png" />
-          <div id="stick1" style="position: absolute; left: 32px; top: 32px">
+          <img src="images/joystick-base.png" style="border: 1px solid rgb(5, 4, 4);"/>
+          <div id="stick1" style="position: relative; left: 32px; top: -98px">
             <img src="images/joystick-red.png" />
           </div>
         </div>
@@ -69,15 +69,11 @@
       <div class="gamepad-group-rightstick">
         <div
           style="
-            border: 1px solid blue;
             width: 128px;
-            position: absolute;
-            left: 210px;
-            top: 150px;
           "
         >
-          <img src="images/joystick-base.png" />
-          <div id="stick2" style="position: absolute; left: 32px; top: 32px">
+          <img src="images/joystick-base.png"  style="border: 1px solid rgb(5, 4, 4);"/>
+          <div id="stick2" style="position: relative; left: 32px; top: -98px">
             <img src="images/joystick-blue.png" />
           </div>
         </div>
@@ -213,6 +209,42 @@
       </div>
     </div>
 
+    <!-- Styles for alignment grids -->
+    <style>
+      .gamepad-group-leftstick {
+        grid-area: lstick;
+      }
+      .gamepad-group-rightstick {
+        grid-area: rstick;
+      }
+      .gamepad-group-buttons {
+        grid-area: buttons;
+      }
+      .gamepad-group-leftshoulder {
+        grid-area: lshoulder;
+      }
+      .gamepad-group-rightshoulder {
+        grid-area: rshoulder;
+      }
+      .gamepad-group-dpad {
+        grid-area: dpad;
+      }
+      .gamepad-group-centerbuttons {
+        grid-area: center;
+      }
+      .gamepad-container {
+        border: solid black 1px;
+        display: grid;
+        grid-template-columns: 30% 40% 30%;
+        grid-template-rows: auto;
+        grid-template-areas:
+          "lshoulder . rshoulder"
+          "lstick center buttons"
+          "dpad . rstick";
+      }
+    </style>
+
+    <!-- Styles for buttons and sticks -->
     <style>
       .status-text {
         margin-left: 360px;
@@ -581,7 +613,8 @@
       }
 
       function promptServerName() {
-        name = prompt("Choose a name to identify your gamepad:");
+        name = prompt("Give the base address of the server you wish to use:");
+        name = "";
         if (name == "null" || !name) {
           name = "";
         } else {
@@ -620,7 +653,7 @@
       }
 
       function promptChosenName() {
-        name = prompt("Choose a name to identify your gamepad:");
+        // name = prompt("Choose a name to identify your gamepad:");  // TODO: Turn this off temporarily when testing
         if (name == "null" || !name) {
           name = "";
         }
