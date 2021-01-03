@@ -14,7 +14,7 @@
   <body>
     Joystick Controls.
     <hr />
-    <div class="status-text">
+    <div class="status-text" style="display: none">
       <div id="status">Nothing to see here.</div>
       <div id="status1" style="color: red">Joystick 1</div>
       <div id="status2" style="color: blue">Joystick 2</div>
@@ -51,161 +51,153 @@
 
     <div class="gamepad-container">
       <div class="gamepad-group-leftstick">
-        <div
-          style="
-            
-            width: 128px;
-            position: absolute;
-            left: 10px;
-            top: 150px;
-          "
-        >
-          <img src="images/joystick-base.png" style="border: 1px solid rgb(5, 4, 4);"/>
+        <div style="width: 128px; margin-right: auto; margin-left: auto">
+          <img
+            src="images/joystick-base.png"
+            style="border: 1px solid rgb(5, 4, 4)"
+          />
           <div id="stick1" style="position: relative; left: 32px; top: -98px">
             <img src="images/joystick-red.png" />
           </div>
         </div>
       </div>
       <div class="gamepad-group-rightstick">
-        <div
-          style="
-            width: 128px;
-          "
-        >
-          <img src="images/joystick-base.png"  style="border: 1px solid rgb(5, 4, 4);"/>
+        <div style="width: 128px; margin-right: auto; margin-left: auto">
+          <img
+            src="images/joystick-base.png"
+            style="border: 1px solid rgb(5, 4, 4)"
+          />
           <div id="stick2" style="position: relative; left: 32px; top: -98px">
             <img src="images/joystick-blue.png" />
           </div>
         </div>
       </div>
       <div class="gamepad-group-buttons">
-        <button
-          class="bg-green text-white circular-shape"
-          style="position: absolute; left: 10px; top: 300px"
-          id="button-a"
-        >
-          A
-        </button>
-        <button
-          class="bg-red text-white circular-shape"
-          style="position: absolute; left: 100px; top: 300px"
-          id="button-b"
-        >
-          B
-        </button>
-        <button
-          class="bg-blue text-white circular-shape"
-          style="position: absolute; left: 190px; top: 300px"
-          id="button-x"
-        >
-          X
-        </button>
-        <button
-          class="bg-yellow circular-shape"
-          style="position: absolute; left: 280px; top: 300px"
-          id="button-y"
-        >
-          Y
-        </button>
+        <div class="cardinal-container">
+          <button
+            class="bg-green text-white circular-shape cardinal-south"
+            style="display:block; margin-left:auto; margin-right:auto;"
+            id="button-a"
+          >
+            A
+          </button>
+          <button
+            class="bg-red text-white circular-shape cardinal-east"
+            style="display:block; margin-right:auto;"
+            id="button-b"
+          >
+            B
+          </button>
+          <button
+            class="bg-blue text-white circular-shape cardinal-west"
+            style="display:block; margin-left:auto;"
+            id="button-x"
+          >
+            X
+          </button>
+          <button
+            class="bg-yellow circular-shape cardinal-north"
+            style="display:block; margin-left:auto; margin-right:auto;"
+            id="button-y"
+          >
+            Y
+          </button>
+        </div>
+        <br />
       </div>
       <div class="gamepad-group-leftshoulder">
-        <button
-          class="bg-grey rectangular-shape"
-          style="position: absolute; left: 190px; top: 390px"
-          id="button-lt"
-        >
-          LT
-        </button>
-        <button
-          class="bg-grey rectangular-shape"
-          style="position: absolute; left: 10px; top: 390px"
-          id="button-lb"
-        >
+        <button class="bg-grey rectangular-shape" style="float:left;" id="button-lb">
           LB
         </button>
+        <button class="bg-grey rectangular-shape" style="float:left" id="button-lt">
+          LT
+        </button>
+        <br />
       </div>
       <div class="gamepad-group-rightshoulder">
-        <button
-          class="bg-grey rectangular-shape"
-          style="position: absolute; left: 280px; top: 390px"
-          id="button-rt"
-        >
-          RT
-        </button>
-        <button
-          class="bg-grey rectangular-shape"
-          style="position: absolute; left: 100px; top: 390px"
-          id="button-rb"
-        >
+        <button class="bg-grey rectangular-shape" style="float:right;" id="button-rb">
           RB
         </button>
+        <button class="bg-grey rectangular-shape" style="float:right;" id="button-rt">
+          RT
+        </button>
+        <br />
       </div>
       <div class="gamepad-group-dpad">
-        <button
-          class="bg-grey square-shape"
-          style="position: absolute; left: 100px; top: 570px"
-          id="dpad_up"
-        >
-          UP
-        </button>
-        <button
-          class="bg-grey square-shape"
-          style="position: absolute; left: 190px; top: 570px"
-          id="dpad_down"
-        >
-          DWN
-        </button>
-        <button
-          class="bg-grey square-shape"
-          style="position: absolute; left: 280px; top: 570px"
-          id="dpad_right"
-        >
-          RGT
-        </button>
-        <button
-          class="bg-grey square-shape"
-          style="position: absolute; left: 370px; top: 570px"
-          id="dpad_left"
-        >
-          LFT
-        </button>
+        <div class="cardinal-container">
+          <button
+            class="bg-grey square-shape cardinal-north"
+            style="margin-left: auto; margin-right: auto"
+            id="dpad_up"
+          >
+            UP
+          </button>
+          <button
+            class="bg-grey square-shape cardinal-south"
+            style="margin-left: auto; margin-right: auto"
+            id="dpad_down"
+          >
+            DWN
+          </button>
+          <button
+            class="bg-grey square-shape cardinal-east"
+            style="margin-right: auto"
+            id="dpad_right"
+          >
+            RGT
+          </button>
+          <button
+            class="bg-grey square-shape cardinal-west"
+            style="margin-left: auto;"
+            id="dpad_left"
+          >
+            LFT
+          </button>
+        </div>
       </div>
       <div class="gamepad-group-centerbuttons">
-        <button
-          class="bg-grey circular-shape"
-          style="position: absolute; left: 10px; top: 480px"
-          id="button-left-stick"
+        <div
+          class="centerbutton-container"
+          style="display: flex; justify-content: center"
         >
-          LS
-        </button>
-        <button
-          class="bg-grey circular-shape"
-          style="position: absolute; left: 100px; top: 480px"
-          id="button-right-stick"
-        >
-          RS
-        </button>
-        <button
-          class="bg-grey rectangular-shape-small"
-          style="position: absolute; left: 190px; top: 480px"
-          id="button-back"
-        >
-          back
-        </button>
-        <button
-          class="bg-grey circular-shape"
-          style="position: absolute; left: 10px; top: 570px"
-          id="button-guide"
-        >
-          O
-        </button>
-        <button
-          class="bg-grey rectangular-shape-small"
-          style="position: absolute; left: 280px; top: 480px"
-          id="button-start"
-        >
-          start
-        </button>
+          <button
+            class="bg-grey rectangular-shape-small"
+            style=""
+            id="button-back"
+          >
+            back
+          </button>
+          <span style="width: 10px"></span>
+          <button class="bg-grey circular-shape" style="" id="button-guide">
+            O
+          </button>
+          <span style="width: 10px"></span>
+          <button
+            class="bg-grey rectangular-shape-small"
+            style=""
+            id="button-start"
+          >
+            start
+          </button>
+        </div>
+        <br />
+        <div style="display: flex; justify-content: center">
+          <button
+            class="bg-grey circular-shape"
+            style=""
+            id="button-left-stick"
+          >
+            LS
+          </button>
+          <span style="width: 10px"></span>
+          <button
+            class="bg-grey circular-shape"
+            style=""
+            id="button-right-stick"
+          >
+            RS
+          </button>
+        </div>
       </div>
     </div>
 
@@ -241,6 +233,28 @@
           "lshoulder . rshoulder"
           "lstick center buttons"
           "dpad . rstick";
+      }
+
+      .cardinal-container {
+        display: grid;
+        grid-template-columns: 33% 33% 33%;
+        grid-template-rows: auto;
+        grid-template-areas:
+          ". north ."
+          "west . east"
+          ". south .";
+      }
+      .cardinal-north {
+        grid-area: north;
+      }
+      .cardinal-west {
+        grid-area: west;
+      }
+      .cardinal-east {
+        grid-area: east;
+      }
+      .cardinal-south {
+        grid-area: south;
       }
     </style>
 
@@ -442,7 +456,6 @@
 
       class ButtonController {
         constructor(buttonID, inactiveStyle, activeStyle) {
-          
           this.activeStyle = activeStyle;
           this.inactiveStyle = inactiveStyle;
 
@@ -499,27 +512,91 @@
         }
       }
 
-      let button1 = new ButtonController("button-a", "bg-green", "bg-green-active");
+      let button1 = new ButtonController(
+        "button-a",
+        "bg-green",
+        "bg-green-active"
+      );
       let button2 = new ButtonController("button-b", "bg-red", "bg-red-active");
-      let button3 = new ButtonController("button-x", "bg-blue", "bg-blue-active");
-      let button4 = new ButtonController("button-y", "bg-yellow", "bg-yellow-active");
+      let button3 = new ButtonController(
+        "button-x",
+        "bg-blue",
+        "bg-blue-active"
+      );
+      let button4 = new ButtonController(
+        "button-y",
+        "bg-yellow",
+        "bg-yellow-active"
+      );
 
-      let button5 = new ButtonController("button-lb", "bg-grey", "bg-grey-active");
-      let button6 = new ButtonController("button-lt", "bg-grey", "bg-grey-active");
-      let button7 = new ButtonController("button-rb", "bg-grey", "bg-grey-active");
-      let button8 = new ButtonController("button-rt", "bg-grey", "bg-grey-active");
+      let button5 = new ButtonController(
+        "button-lb",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let button6 = new ButtonController(
+        "button-lt",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let button7 = new ButtonController(
+        "button-rb",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let button8 = new ButtonController(
+        "button-rt",
+        "bg-grey",
+        "bg-grey-active"
+      );
 
-      let button9 = new ButtonController("button-left-stick", "bg-grey", "bg-grey-active");
-      let button10 = new ButtonController("button-right-stick", "bg-grey", "bg-grey-active");
+      let button9 = new ButtonController(
+        "button-left-stick",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let button10 = new ButtonController(
+        "button-right-stick",
+        "bg-grey",
+        "bg-grey-active"
+      );
 
-      let button11 = new ButtonController("button-back", "bg-grey", "bg-grey-active");
-      let button12 = new ButtonController("button-start", "bg-grey", "bg-grey-active");
-      let button13 = new ButtonController("button-guide", "bg-grey", "bg-grey-active");
+      let button11 = new ButtonController(
+        "button-back",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let button12 = new ButtonController(
+        "button-start",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let button13 = new ButtonController(
+        "button-guide",
+        "bg-grey",
+        "bg-grey-active"
+      );
 
-      let dpad_up = new ButtonController("dpad_up", "bg-grey", "bg-grey-active");
-      let dpad_down = new ButtonController("dpad_down", "bg-grey", "bg-grey-active");
-      let dpad_right = new ButtonController("dpad_right", "bg-grey", "bg-grey-active");
-      let dpad_left = new ButtonController("dpad_left", "bg-grey", "bg-grey-active");
+      let dpad_up = new ButtonController(
+        "dpad_up",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let dpad_down = new ButtonController(
+        "dpad_down",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let dpad_right = new ButtonController(
+        "dpad_right",
+        "bg-grey",
+        "bg-grey-active"
+      );
+      let dpad_left = new ButtonController(
+        "dpad_left",
+        "bg-grey",
+        "bg-grey-active"
+      );
 
       let data = {};
       let socket = null;
