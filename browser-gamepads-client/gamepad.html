@@ -1,216 +1,350 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Joystick Controls</title>
     <style>
-    body
-    {
+      body {
         font-family: Courier, monospaced;
         font-size: 16px;
         font-weight: bold;
-    }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    Joystick Controls.
+    <hr />
+    <div class="status-text">
+      <div id="status">Nothing to see here.</div>
+      <div id="status1" style="color: red">Joystick 1</div>
+      <div id="status2" style="color: blue">Joystick 2</div>
+      <div id="button1">Button 1</div>
 
-Joystick Controls.
-<hr>
-<div class="status-text">
-    <div id="status">Nothing to see here.</div>
-    <div id="status1" style="color: red;">Joystick 1</div>
-    <div id="status2" style="color: blue;">Joystick 2</div>
-    <div id="button1">Button 1</div>
+      <div id="button2">button2</div>
+      <div id="button3">button3</div>
+      <div id="button4">button4</div>
 
-    <div id="button2">button2</div>
-    <div id="button3">button3</div>
-    <div id="button4">button4</div>
+      <div id="button5">button5</div>
+      <div id="button6">button6</div>
+      <div id="button7">button7</div>
+      <div id="button8">button8</div>
 
-    <div id="button5">button5</div>
-    <div id="button6">button6</div>
-    <div id="button7">button7</div>
-    <div id="button8">button8</div>
+      <div id="button9">button9</div>
+      <div id="button10">button10</div>
 
-    <div id="button9">button9</div>
-    <div id="button10">button10</div>
+      <div id="button11">button11</div>
+      <div id="button12">button12</div>
+      <div id="button13">button13</div>
 
-    <div id="button11">button11</div>
-    <div id="button12">button12</div>
-    <div id="button13">button13</div>
+      <div id="dpad_up_s">dpad_up</div>
+      <div id="dpad_down_s">dpad_down</div>
+      <div id="dpad_right_s">dpad_right</div>
+      <div id="dpad_left_s">dpad_left</div>
 
-    <div id="dpad_up_s">dpad_up</div>
-    <div id="dpad_down_s">dpad_down</div>
-    <div id="dpad_right_s">dpad_right</div>
-    <div id="dpad_left_s">dpad_left</div>
-
-    <div id="gamepad-data">gamepad data</div>
-    <button onclick="promptChosenName()">Set your Chosen Name</button>
-    <button onclick="setupWebSocket()">Connect to Server</button>
-    <button onclick="promptServerName()">Change Server name</button>
-</div>
-
-<hr>
-<div style="border: 1px solid rgb(5, 4, 4); width: 128px; position: absolute; left:10px; top:150px;">
-    <img src="images/joystick-base.png"/>
-    <div id="stick1" style="position: absolute; left:32px; top:32px;">
-    <img src="images/joystick-red.png"/>		
+      <div id="gamepad-data">gamepad data</div>
+      <button onclick="promptChosenName()">Set your Chosen Name</button>
+      <button onclick="setupWebSocket()">Connect to Server</button>
+      <button onclick="promptServerName()">Change Server name</button>
     </div>
-</div>
 
-<div style="border: 1px solid blue; width: 128px; position: absolute; left:210px; top:150px;">
-    <img src="images/joystick-base.png"/>
-    <div id="stick2" style="position: absolute; left:32px; top:32px;">
-    <img src="images/joystick-blue.png"/>		
+    <hr />
+
+    <div class="gamepad-container">
+      <div class="gamepad-group-leftstick">
+        <div
+          style="
+            border: 1px solid rgb(5, 4, 4);
+            width: 128px;
+            position: absolute;
+            left: 10px;
+            top: 150px;
+          "
+        >
+          <img src="images/joystick-base.png" />
+          <div id="stick1" style="position: absolute; left: 32px; top: 32px">
+            <img src="images/joystick-red.png" />
+          </div>
+        </div>
+      </div>
+      <div class="gamepad-group-rightstick">
+        <div
+          style="
+            border: 1px solid blue;
+            width: 128px;
+            position: absolute;
+            left: 210px;
+            top: 150px;
+          "
+        >
+          <img src="images/joystick-base.png" />
+          <div id="stick2" style="position: absolute; left: 32px; top: 32px">
+            <img src="images/joystick-blue.png" />
+          </div>
+        </div>
+      </div>
+      <div class="gamepad-group-buttons">
+        <button
+          class="bg-green text-white circular-shape"
+          style="position: absolute; left: 10px; top: 300px"
+          id="button-a"
+        >
+          A
+        </button>
+        <button
+          class="bg-red text-white circular-shape"
+          style="position: absolute; left: 100px; top: 300px"
+          id="button-b"
+        >
+          B
+        </button>
+        <button
+          class="bg-blue text-white circular-shape"
+          style="position: absolute; left: 190px; top: 300px"
+          id="button-x"
+        >
+          X
+        </button>
+        <button
+          class="bg-yellow circular-shape"
+          style="position: absolute; left: 280px; top: 300px"
+          id="button-y"
+        >
+          Y
+        </button>
+      </div>
+      <div class="gamepad-group-leftshoulder">
+        <button
+          class="bg-grey rectangular-shape"
+          style="position: absolute; left: 190px; top: 390px"
+          id="button-lt"
+        >
+          LT
+        </button>
+        <button
+          class="bg-grey rectangular-shape"
+          style="position: absolute; left: 10px; top: 390px"
+          id="button-lb"
+        >
+          LB
+        </button>
+      </div>
+      <div class="gamepad-group-rightshoulder">
+        <button
+          class="bg-grey rectangular-shape"
+          style="position: absolute; left: 280px; top: 390px"
+          id="button-rt"
+        >
+          RT
+        </button>
+        <button
+          class="bg-grey rectangular-shape"
+          style="position: absolute; left: 100px; top: 390px"
+          id="button-rb"
+        >
+          RB
+        </button>
+      </div>
+      <div class="gamepad-group-dpad">
+        <button
+          class="bg-grey square-shape"
+          style="position: absolute; left: 100px; top: 570px"
+          id="dpad_up"
+        >
+          UP
+        </button>
+        <button
+          class="bg-grey square-shape"
+          style="position: absolute; left: 190px; top: 570px"
+          id="dpad_down"
+        >
+          DWN
+        </button>
+        <button
+          class="bg-grey square-shape"
+          style="position: absolute; left: 280px; top: 570px"
+          id="dpad_right"
+        >
+          RGT
+        </button>
+        <button
+          class="bg-grey square-shape"
+          style="position: absolute; left: 370px; top: 570px"
+          id="dpad_left"
+        >
+          LFT
+        </button>
+      </div>
+      <div class="gamepad-group-centerbuttons">
+        <button
+          class="bg-grey circular-shape"
+          style="position: absolute; left: 10px; top: 480px"
+          id="button-left-stick"
+        >
+          LS
+        </button>
+        <button
+          class="bg-grey circular-shape"
+          style="position: absolute; left: 100px; top: 480px"
+          id="button-right-stick"
+        >
+          RS
+        </button>
+        <button
+          class="bg-grey rectangular-shape-small"
+          style="position: absolute; left: 190px; top: 480px"
+          id="button-back"
+        >
+          back
+        </button>
+        <button
+          class="bg-grey circular-shape"
+          style="position: absolute; left: 10px; top: 570px"
+          id="button-guide"
+        >
+          O
+        </button>
+        <button
+          class="bg-grey rectangular-shape-small"
+          style="position: absolute; left: 280px; top: 480px"
+          id="button-start"
+        >
+          start
+        </button>
+      </div>
     </div>
-</div>
 
-<button class="bg-green text-white circular-shape" style="position:absolute; left: 10px; top: 300px;" id="button-a">A</button>
-<button class="bg-red text-white circular-shape" style="position:absolute; left: 100px; top: 300px;" id="button-b">B</button>
-<button class="bg-blue text-white circular-shape" style="position:absolute; left: 190px; top: 300px;" id="button-x">X</button>
-<button class="bg-yellow circular-shape" style="position:absolute; left: 280px; top: 300px;" id="button-y">Y</button>
-
-<button class="bg-grey rectangular-shape" style="position:absolute; left: 10px; top: 390px;" id="button-lb">LB</button>
-<button class="bg-grey rectangular-shape" style="position:absolute; left: 100px; top: 390px;" id="button-rb">RB</button>
-<button class="bg-grey rectangular-shape" style="position:absolute; left: 190px; top: 390px;" id="button-lt">LT</button>
-<button class="bg-grey rectangular-shape" style="position:absolute; left: 280px; top: 390px;" id="button-rt">RT</button>
-
-<button class="bg-grey circular-shape" style="position:absolute; left: 10px; top: 480px;" id="button-left-stick">LS</button>
-<button class="bg-grey circular-shape" style="position:absolute; left: 100px; top: 480px;" id="button-right-stick">RS</button>
-<button class="bg-grey rectangular-shape-small" style="position:absolute; left: 190px; top: 480px;" id="button-back">back</button>
-<button class="bg-grey rectangular-shape-small" style="position:absolute; left: 280px; top: 480px;" id="button-start">start</button>
-<button class="bg-grey circular-shape" style="position:absolute; left: 10px; top: 570px;" id="button-guide">O</button>
-
-<button class="bg-grey square-shape" style="position:absolute; left: 100px; top: 570px;" id="dpad_up">UP</button>
-<button class="bg-grey square-shape" style="position:absolute; left: 190px; top: 570px;" id="dpad_down">DWN</button>
-<button class="bg-grey square-shape" style="position:absolute; left: 280px; top: 570px;" id="dpad_right">RGT</button>
-<button class="bg-grey square-shape" style="position:absolute; left: 370px; top: 570px;" id="dpad_left">LFT</button>
-
-
-<style>
-    .status-text {
+    <style>
+      .status-text {
         margin-left: 360px;
-    }
-    .large-button {
-        height:60px;
+      }
+      .large-button {
+        height: 60px;
         width: 80px;
         font-size: 40px;
-    }
-    .circular-shape {
-        height:80px;
+      }
+      .circular-shape {
+        height: 80px;
         width: 80px;
         font-size: 40px;
         border-radius: 50%;
-    }
-    .rectangular-shape {
-        height:60px;
+      }
+      .rectangular-shape {
+        height: 60px;
         width: 80px;
         font-size: 40px;
         border-radius: 10%;
-    }
-    .square-shape {
-        height:60px;
+      }
+      .square-shape {
+        height: 60px;
         width: 60px;
         font-size: 20px;
         border-radius: 10%;
         text-align: center;
-    }
-    .rectangular-shape-small {
-        height:50px;
+      }
+      .rectangular-shape-small {
+        height: 50px;
         width: 80px;
         font-size: 30px;
         border-radius: 10%;
-    }
-    .text-white { color: white; }
-    .bg-green { background-color: green; }
-    .bg-red   { background-color: red;}
-    .bg-blue { background-color: blue; }
-    .bg-yellow { background-color: yellow; }
-    .bg-grey { background-color: grey; }
+      }
+      .text-white {
+        color: white;
+      }
+      .bg-green {
+        background-color: green;
+      }
+      .bg-red {
+        background-color: red;
+      }
+      .bg-blue {
+        background-color: blue;
+      }
+      .bg-yellow {
+        background-color: yellow;
+      }
+      .bg-grey {
+        background-color: grey;
+      }
 
-    .bg-green:hover .bg-green:active {background-color: lightgreen;}
-    .bg-green:active {background-color: lightgreen;}
-    .bg-blue:hover .bg-blue:active {background-color: lightblue;}
-    .bg-blue:active {background-color: lightblue;}
-    .bg-red:hover .bg-red:active {background-color: lightred;}
-    .bg-red:active {background-color: rgb(255, 122, 122);}
-    .bg-yellow:hover .bg-yellow:active {background-color: lightyellow;}
-    .bg-yellow:active {background-color: lightyellow;}
+      .bg-green-active {
+        background-color: lightgreen;
+      }
+      .bg-blue-active {
+        background-color: lightblue;
+      }
+      .bg-red-active {
+        background-color: rgb(255, 122, 122);
+      }
+      .bg-yellow-active {
+        background-color: lightyellow;
+      }
+      .bg-grey-active {
+        background-color: lightgrey;
+      }
+    </style>
 
-    .bg-grey:hover .bg-grey:active {background-color: lightgrey;}
-    .bg-grey:active {background-color: lightgrey;}
-</style>
+    <script>
+      class JoystickController {
+        // stickID: ID of HTML element (representing joystick) that will be dragged
+        // maxDistance: maximum amount joystick can move in any direction
+        // deadzone: joystick must move at least this amount from origin to register value change
+        constructor(stickID, maxDistance, deadzone) {
+          this.id = stickID;
+          let stick = document.getElementById(stickID);
 
-<script>
+          // location from which drag begins, used to calculate offsets
+          this.dragStart = null;
 
-class JoystickController
-{
-    // stickID: ID of HTML element (representing joystick) that will be dragged
-    // maxDistance: maximum amount joystick can move in any direction
-    // deadzone: joystick must move at least this amount from origin to register value change
-    constructor( stickID, maxDistance, deadzone )
-    {
-        this.id = stickID;
-        let stick = document.getElementById(stickID);
+          // track touch identifier in case multiple joysticks present
+          this.touchId = null;
 
-        // location from which drag begins, used to calculate offsets
-        this.dragStart = null;
+          this.active = false;
+          this.value = { x: 0, y: 0 };
 
-        // track touch identifier in case multiple joysticks present
-        this.touchId = null;
-        
-        this.active = false;
-        this.value = { x: 0, y: 0 }; 
+          let self = this;
 
-        let self = this;
-
-        function handleDown(event)
-        {
+          function handleDown(event) {
             self.active = true;
 
             // all drag movements are instantaneous
-            stick.style.transition = '0s';
+            stick.style.transition = "0s";
 
             // touch event fired before mouse event; prevent redundant mouse event from firing
             event.preventDefault();
 
             if (event.changedTouches)
-                self.dragStart = { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
-            else
-                self.dragStart = { x: event.clientX, y: event.clientY };
+              self.dragStart = {
+                x: event.changedTouches[0].clientX,
+                y: event.changedTouches[0].clientY,
+              };
+            else self.dragStart = { x: event.clientX, y: event.clientY };
 
             // if this is a touch event, keep track of which one
             if (event.changedTouches)
-                self.touchId = event.changedTouches[0].identifier;
-            
+              self.touchId = event.changedTouches[0].identifier;
+
             sendGamepadData();
-        }
-        
-        this.updateIndex = 0;
-        this.updateInterval = 10;
-        function handleMove(event) 
-        {
-            if ( !self.active ) return;
+          }
+
+          this.updateIndex = 0;
+          this.updateInterval = 10;
+          function handleMove(event) {
+            if (!self.active) return;
 
             // if this is a touch event, make sure it is the right one
             // also handle multiple simultaneous touchmove events
             let touchmoveId = null;
-            if (event.changedTouches)
-            {
-                for (let i = 0; i < event.changedTouches.length; i++)
-                {
-                    if (self.touchId == event.changedTouches[i].identifier)
-                    {
-                        touchmoveId = i;
-                        event.clientX = event.changedTouches[i].clientX;
-                        event.clientY = event.changedTouches[i].clientY;
-                    }
+            if (event.changedTouches) {
+              for (let i = 0; i < event.changedTouches.length; i++) {
+                if (self.touchId == event.changedTouches[i].identifier) {
+                  touchmoveId = i;
+                  event.clientX = event.changedTouches[i].clientX;
+                  event.clientY = event.changedTouches[i].clientY;
                 }
+              }
 
-                if (touchmoveId == null) return;
+              if (touchmoveId == null) return;
             }
-
-            
 
             const xDiff = event.clientX - self.dragStart.x;
             const yDiff = event.clientY - self.dragStart.y;
@@ -218,31 +352,37 @@ class JoystickController
             // const distance = Math.min(maxDistance, Math.hypot(xDiff, yDiff));
             // const xPosition = distance * Math.cos(angle);
             // const yPosition = distance * Math.sin(angle);
-            const xPosition0 = parseInt(Math.min(maxDistance, Math.abs(xDiff)) * Math.sign(xDiff))
-            const yPosition0 = parseInt(Math.min(maxDistance, Math.abs(yDiff)) * Math.sign(yDiff))
-            
+            const xPosition0 = parseInt(
+              Math.min(maxDistance, Math.abs(xDiff)) * Math.sign(xDiff)
+            );
+            const yPosition0 = parseInt(
+              Math.min(maxDistance, Math.abs(yDiff)) * Math.sign(yDiff)
+            );
 
             // move stick image to new position
             stick.style.transform = `translate3d(${xPosition0}px, ${yPosition0}px, 0px)`;
-            
-            self.value = { x: xPosition0, y: yPosition0};
+
+            self.value = { x: xPosition0, y: yPosition0 };
 
             self.updateIndex++;
             if (self.updateIndex >= self.updateInterval) {
-                sendGamepadData();
-                self.updateIndex = 0;
+              sendGamepadData();
+              self.updateIndex = 0;
             }
           }
 
-        function handleUp(event) 
-        {
-            if ( !self.active ) return;
+          function handleUp(event) {
+            if (!self.active) return;
 
             // if this is a touch event, make sure it is the right one
-            if (event.changedTouches && self.touchId != event.changedTouches[0].identifier) return;
+            if (
+              event.changedTouches &&
+              self.touchId != event.changedTouches[0].identifier
+            )
+              return;
 
             // transition the joystick position back to center
-            stick.style.transition = '.2s';
+            stick.style.transition = ".2s";
             stick.style.transform = `translate3d(0px, 0px, 0px)`;
 
             // reset everything
@@ -250,221 +390,262 @@ class JoystickController
             self.touchId = null;
             self.active = false;
             sendGamepadData();
+          }
+
+          stick.addEventListener("mousedown", handleDown);
+          stick.addEventListener("touchstart", handleDown);
+          document.addEventListener("mousemove", handleMove, {
+            passive: false,
+          });
+          document.addEventListener("touchmove", handleMove, {
+            passive: false,
+          });
+          document.addEventListener("mouseup", handleUp);
+          document.addEventListener("touchend", handleUp);
         }
+      }
 
-        stick.addEventListener('mousedown', handleDown);
-        stick.addEventListener('touchstart', handleDown);
-        document.addEventListener('mousemove', handleMove, {passive: false});
-        document.addEventListener('touchmove', handleMove, {passive: false});
-        document.addEventListener('mouseup', handleUp);
-        document.addEventListener('touchend', handleUp);
-    }
-}
+      let joystick1 = new JoystickController("stick1", 64, 8);
+      let joystick2 = new JoystickController("stick2", 64, 8);
 
-let joystick1 = new JoystickController("stick1", 64, 8);
-let joystick2 = new JoystickController("stick2", 64, 8);
+      class ButtonController {
+        constructor(buttonID, inactiveStyle, activeStyle) {
+          
+          this.activeStyle = activeStyle;
+          this.inactiveStyle = inactiveStyle;
 
-class ButtonController {
-    constructor( buttonID ) {
-        this.id = buttonID;
-        let button = document.getElementById(buttonID);
+          this.id = buttonID;
+          let button = document.getElementById(buttonID);
+          this.button = button;
 
-        this.active = false;
-        this.touchId = null;
-        let self = this;
-        function handleDown(event)
-        {
+          this.active = false;
+          this.touchId = null;
+          let self = this;
+          function handleDown(event) {
             self.active = true;
+            self.setActiveStyle();
             event.preventDefault();
 
             // if this is a touch event, keep track of which one
             if (event.changedTouches)
-                self.touchId = event.changedTouches[0].identifier;
-            
+              self.touchId = event.changedTouches[0].identifier;
+
             sendGamepadData();
-        }
-        function handleUp(event)
-        {
-            if ( !self.active ) return;
-            
+          }
+          function handleUp(event) {
+            if (!self.active) return;
+
             // if this is a touch event, make sure it is the right one
-            if (event.changedTouches && self.touchId != event.changedTouches[0].identifier) return;
+            if (
+              event.changedTouches &&
+              self.touchId != event.changedTouches[0].identifier
+            )
+              return;
             self.touchId = null;
             self.active = false;
+            self.setInactiveStyle();
             sendGamepadData();
+          }
+          button.addEventListener("mousedown", handleDown);
+          button.addEventListener("touchstart", handleDown);
+          document.addEventListener("mouseup", handleUp);
+          document.addEventListener("touchend", handleUp);
         }
-        button.addEventListener('mousedown', handleDown);
-        button.addEventListener('touchstart', handleDown);
-        document.addEventListener('mouseup',handleUp);
-        document.addEventListener('touchend', handleUp);
 
-    }
-    isActive() {
-        return this.active
-    }
-}
+        setActiveStyle() {
+          this.button.classList.remove(this.inactiveStyle);
+          this.button.classList.add(this.activeStyle);
+        }
 
-let button1 = new ButtonController("button-a")
-let button2 = new ButtonController("button-b")
-let button3 = new ButtonController("button-x")
-let button4 = new ButtonController("button-y")
+        setInactiveStyle() {
+          this.button.classList.remove(this.activeStyle);
+          this.button.classList.add(this.inactiveStyle);
+        }
 
-let button5 = new ButtonController("button-lb")
-let button6 = new ButtonController("button-lt")
-let button7 = new ButtonController("button-rb")
-let button8 = new ButtonController("button-rt")
+        isActive() {
+          return this.active;
+        }
+      }
 
-let button9 = new ButtonController("button-left-stick")
-let button10 = new ButtonController("button-right-stick")
+      let button1 = new ButtonController("button-a", "bg-green", "bg-green-active");
+      let button2 = new ButtonController("button-b", "bg-red", "bg-red-active");
+      let button3 = new ButtonController("button-x", "bg-blue", "bg-blue-active");
+      let button4 = new ButtonController("button-y", "bg-yellow", "bg-yellow-active");
 
-let button11 = new ButtonController("button-back")
-let button12 = new ButtonController("button-start")
-let button13 = new ButtonController("button-guide")
+      let button5 = new ButtonController("button-lb", "bg-grey", "bg-grey-active");
+      let button6 = new ButtonController("button-lt", "bg-grey", "bg-grey-active");
+      let button7 = new ButtonController("button-rb", "bg-grey", "bg-grey-active");
+      let button8 = new ButtonController("button-rt", "bg-grey", "bg-grey-active");
 
-let dpad_up = new ButtonController("dpad_up")
-let dpad_down = new ButtonController("dpad_down")
-let dpad_right = new ButtonController("dpad_right")
-let dpad_left = new ButtonController("dpad_left")
+      let button9 = new ButtonController("button-left-stick", "bg-grey", "bg-grey-active");
+      let button10 = new ButtonController("button-right-stick", "bg-grey", "bg-grey-active");
 
-let data = {}
-let socket = null;
-let brokerUri = 'localhost:5000'
-let uid = randUID(6); // 6 length hex code
-let chosenName = '';
+      let button11 = new ButtonController("button-back", "bg-grey", "bg-grey-active");
+      let button12 = new ButtonController("button-start", "bg-grey", "bg-grey-active");
+      let button13 = new ButtonController("button-guide", "bg-grey", "bg-grey-active");
 
-function getButtonData() {
-    return {
-        'a': button1.isActive() ? 1 : 0,
-        'b': button2.isActive() ? 1 : 0,
-        'x': button3.isActive() ? 1 : 0,
-        'y': button4.isActive() ? 1 : 0,
+      let dpad_up = new ButtonController("dpad_up", "bg-grey", "bg-grey-active");
+      let dpad_down = new ButtonController("dpad_down", "bg-grey", "bg-grey-active");
+      let dpad_right = new ButtonController("dpad_right", "bg-grey", "bg-grey-active");
+      let dpad_left = new ButtonController("dpad_left", "bg-grey", "bg-grey-active");
 
-        'lb': button5.isActive() ? 1 : 0,
-        'lt': button6.isActive() ? 32000 : 0,
-        'rb': button7.isActive() ? 1 : 0,
-        'rt': button8.isActive() ? 32000 : 0,
+      let data = {};
+      let socket = null;
+      let brokerUri = "localhost:5000";
+      let uid = randUID(6); // 6 length hex code
+      let chosenName = "";
 
-        'lc': button9.isActive() ? 1 : 0,
-        'rc': button10.isActive() ? 1 : 0,
+      function getButtonData() {
+        return {
+          a: button1.isActive() ? 1 : 0,
+          b: button2.isActive() ? 1 : 0,
+          x: button3.isActive() ? 1 : 0,
+          y: button4.isActive() ? 1 : 0,
 
-        'bk': button11.isActive() ? 1 : 0,
-        'st': button12.isActive() ? 1 : 0,
-        'gb': button13.isActive() ? 1 : 0,
+          lb: button5.isActive() ? 1 : 0,
+          lt: button6.isActive() ? 32000 : 0,
+          rb: button7.isActive() ? 1 : 0,
+          rt: button8.isActive() ? 32000 : 0,
 
-        'lx': parseInt( (joystick1.value.x << 8) + 16384),
-        'ly': parseInt(-(joystick1.value.y << 8) + 16384),
-        'rx': parseInt( (joystick2.value.x << 8) + 16384),
-        'ry': parseInt(-(joystick2.value.y << 8) + 16384),
+          lc: button9.isActive() ? 1 : 0,
+          rc: button10.isActive() ? 1 : 0,
 
-        'hx': 16384 + (dpad_up.isActive() ? 16384: 0) - (dpad_down.isActive() ? 16384 : 0),
-        'hy': 16384 + (dpad_right.isActive() ? 16384 : 0) - (dpad_left.isActive() ? 16384 : 0),
-    }
-}
+          bk: button11.isActive() ? 1 : 0,
+          st: button12.isActive() ? 1 : 0,
+          gb: button13.isActive() ? 1 : 0,
 
-function update()
-{
-    document.getElementById("status1").innerText = "Joystick 1: " + JSON.stringify(joystick1.value);
-    document.getElementById("status2").innerText = "Joystick 2: " + JSON.stringify(joystick2.value);
+          lx: parseInt((joystick1.value.x << 8) + 16384),
+          ly: parseInt(-(joystick1.value.y << 8) + 16384),
+          rx: parseInt((joystick2.value.x << 8) + 16384),
+          ry: parseInt(-(joystick2.value.y << 8) + 16384),
 
-    document.getElementById("button1").innerText = "button1: " + button1.isActive();
-    document.getElementById("button2").innerText = "button2: " + button2.isActive();
-    document.getElementById("button3").innerText = "button3: " + button3.isActive();
-    document.getElementById("button4").innerText = "button4: " + button4.isActive();
+          hx:
+            16384 +
+            (dpad_up.isActive() ? 16384 : 0) -
+            (dpad_down.isActive() ? 16384 : 0),
+          hy:
+            16384 +
+            (dpad_right.isActive() ? 16384 : 0) -
+            (dpad_left.isActive() ? 16384 : 0),
+        };
+      }
 
-    document.getElementById("button5").innerText = "button5: " + button5.isActive();
-    document.getElementById("button6").innerText = "button6: " + button6.isActive();
-    document.getElementById("button7").innerText = "button7: " + button7.isActive();
-    document.getElementById("button8").innerText = "button8: " + button8.isActive();
+      function update() {
+        document.getElementById("status1").innerText =
+          "Joystick 1: " + JSON.stringify(joystick1.value);
+        document.getElementById("status2").innerText =
+          "Joystick 2: " + JSON.stringify(joystick2.value);
 
-    document.getElementById("button9").innerText = "button9: " + button9.isActive();
-    document.getElementById("button10").innerText = "button10: " + button10.isActive();
+        document.getElementById("button1").innerText =
+          "button1: " + button1.isActive();
+        document.getElementById("button2").innerText =
+          "button2: " + button2.isActive();
+        document.getElementById("button3").innerText =
+          "button3: " + button3.isActive();
+        document.getElementById("button4").innerText =
+          "button4: " + button4.isActive();
 
-    document.getElementById("button11").innerText = "button11: " + button11.isActive();
-    document.getElementById("button12").innerText = "button12: " + button12.isActive();
-    document.getElementById("button13").innerText = "button13: " + button13.isActive();
+        document.getElementById("button5").innerText =
+          "button5: " + button5.isActive();
+        document.getElementById("button6").innerText =
+          "button6: " + button6.isActive();
+        document.getElementById("button7").innerText =
+          "button7: " + button7.isActive();
+        document.getElementById("button8").innerText =
+          "button8: " + button8.isActive();
 
-    document.getElementById("dpad_up_s").innerText = "dpad_up: " + dpad_up.isActive();
-    document.getElementById("dpad_down_s").innerText = "dpad_down: " + dpad_down.isActive();
-    document.getElementById("dpad_right_s").innerText = "dpad_right: " + dpad_right.isActive();
-    document.getElementById("dpad_left_s").innerText = "dpad_left: " + dpad_left.isActive();
-    
-    data = (getButtonData());
-    document.getElementById("gamepad-data").innerText = "gamepad data: " + JSON.stringify(data);
-}
+        document.getElementById("button9").innerText =
+          "button9: " + button9.isActive();
+        document.getElementById("button10").innerText =
+          "button10: " + button10.isActive();
 
-function promptServerName() {
-    name = prompt("Choose a name to identify your gamepad:")
-    if (name == "null" || !name) {
-        name = '';
-    } else {
-        brokerUri = name;
-    }
-}
-function setupWebSocket() {
-    if (socket == null || socket.readyState == socket.CLOSED) {
-        try {
-            socket = new WebSocket('ws://'+ brokerUri +'/clients');
-            socket.onmessage = function(msg) {
-            }
-            socket.onclose = function(ev) {
-                console.log("WebScoket closed.");
-                document.getElementById('status').innerText = 'WebSocket closed.';
-            }
-            socket.onopen = function(ev) {
-                console.log("WebSocket open.")
-                document.getElementById('status').innerText = 'WebSocket open.';
-            }
-        } catch (e) {
-            document.getElementById('status').innerText = e;
+        document.getElementById("button11").innerText =
+          "button11: " + button11.isActive();
+        document.getElementById("button12").innerText =
+          "button12: " + button12.isActive();
+        document.getElementById("button13").innerText =
+          "button13: " + button13.isActive();
+
+        document.getElementById("dpad_up_s").innerText =
+          "dpad_up: " + dpad_up.isActive();
+        document.getElementById("dpad_down_s").innerText =
+          "dpad_down: " + dpad_down.isActive();
+        document.getElementById("dpad_right_s").innerText =
+          "dpad_right: " + dpad_right.isActive();
+        document.getElementById("dpad_left_s").innerText =
+          "dpad_left: " + dpad_left.isActive();
+
+        data = getButtonData();
+        document.getElementById("gamepad-data").innerText =
+          "gamepad data: " + JSON.stringify(data);
+      }
+
+      function promptServerName() {
+        name = prompt("Choose a name to identify your gamepad:");
+        if (name == "null" || !name) {
+          name = "";
+        } else {
+          brokerUri = name;
+        }
+      }
+      function setupWebSocket() {
+        if (socket == null || socket.readyState == socket.CLOSED) {
+          try {
+            socket = new WebSocket("ws://" + brokerUri + "/clients");
+            socket.onmessage = function (msg) {};
+            socket.onclose = function (ev) {
+              console.log("WebScoket closed.");
+              document.getElementById("status").innerText = "WebSocket closed.";
+            };
+            socket.onopen = function (ev) {
+              console.log("WebSocket open.");
+              document.getElementById("status").innerText = "WebSocket open.";
+            };
+          } catch (e) {
+            document.getElementById("status").innerText = e;
             socket = null;
-        } 
-    }
-}
+          }
+        }
+      }
 
+      function randInt(a, b) {
+        // a to b inclusive
+        return Math.floor(Math.random(new Date().getTime()) * (b - a + 1)) + a;
+      }
 
-function randInt(a,b) { // a to b inclusive
-    return Math.floor(Math.random(new Date().getTime()) * (b - a + 1)) + a
-}
+      function randUID(length) {
+        let res = "";
+        for (let i = 0; i < length; i++) res += randInt(0, 15).toString(16);
+        return res;
+      }
 
-function randUID(length) {
-    let res = '';
-    for (let i = 0; i < length; i++) res += randInt(0, 15).toString(16);
-    return res
-}
+      function promptChosenName() {
+        name = prompt("Choose a name to identify your gamepad:");
+        if (name == "null" || !name) {
+          name = "";
+        }
+        chosenName = name;
+      }
+      promptChosenName();
 
+      function sendGamepadData() {
+        update();
+        if (socket == null || socket.readyState == socket.CLOSED) {
+        } else if (socket.readyState == socket.OPEN) {
+          // socket open and connected
+          socket.send(JSON.stringify({ ID: chosenName, gamepad: data }));
+        }
+      }
 
-function promptChosenName() {
-    name = prompt("Choose a name to identify your gamepad:")
-    if (name == "null" || !name) {
-        name = '';
-    }
-    chosenName = name;
-}
-promptChosenName();
+      function loop() {
+        setTimeout(function () {
+          // requestAnimationFrame(loop);
+        }, 100);
+      }
 
-function sendGamepadData() {
-    update();
-    if (socket == null || socket.readyState == socket.CLOSED) {
-    
-    } else if (socket.readyState == socket.OPEN) { // socket open and connected
-        socket.send(JSON.stringify({'ID': chosenName, 'gamepad':data}));
-    }
-}
+      (function () {})();
 
-function loop()
-{
-    setTimeout(function() {
-        // requestAnimationFrame(loop);
-    }, 100);
-}
-
-(function(){
-
-})();
-
-loop();
-
-</script>
-
-</body>
+      loop();
+    </script>
+  </body>
 </html>
