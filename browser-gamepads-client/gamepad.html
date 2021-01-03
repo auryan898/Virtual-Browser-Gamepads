@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Joystick Controls</title>
+    <title>Remote Browser Gamepad by Ryan</title>
     <style>
       body {
         font-family: Courier, monospaced;
@@ -12,7 +12,7 @@
   </head>
 
   <body>
-    Joystick Controls.
+    Remote Browser Gamepad.
     <hr />
     <div class="status-text" style="display: none">
       <div id="status">Nothing to see here.</div>
@@ -42,14 +42,20 @@
       <div id="dpad_left_s">dpad_left</div>
 
       <div id="gamepad-data">gamepad data</div>
-      <button onclick="promptChosenName()">Set your Chosen Name</button>
-      <button onclick="setupWebSocket()">Connect to Server</button>
-      <button onclick="promptServerName()">Change Server name</button>
     </div>
 
-    <hr />
+    <div id="settings" style="display:none;">
+      <button onclick="closeSettings()">Close Settings</button>
+      <hr />
+      <button onclick="promptChosenName()">Set your Chosen Name</button>
+      <button onclick="promptServerName()">Change Server name</button>
+      <hr />
+      <button onclick="setupWebSocket()">Connect to Server</button>
+      <hr />
+    </div>
 
-    <div class="gamepad-container">
+
+    <div id="gamepad" class="gamepad-container">
       <div class="gamepad-group-leftstick">
         <div style="width: 128px; margin-right: auto; margin-left: auto">
           <img
@@ -199,6 +205,11 @@
           </button>
         </div>
       </div>
+      <div class="gamepad-group-status">
+        <button style="display:block; margin-left:auto; margin-right:auto" onclick="openSettings()">
+          settings
+        </button>
+      </div>
     </div>
 
     <!-- Styles for alignment grids -->
@@ -224,6 +235,9 @@
       .gamepad-group-centerbuttons {
         grid-area: center;
       }
+      .gamepad-group-status {
+        grid-area: status;
+      }
       .gamepad-container {
         border: solid black 1px;
         display: grid;
@@ -232,7 +246,7 @@
         grid-template-areas:
           "lshoulder . rshoulder"
           "lstick center buttons"
-          "dpad . rstick";
+          "dpad status rstick";
       }
 
       .cardinal-container {
@@ -330,6 +344,18 @@
     </style>
 
     <script>
+      function openSettings(){
+        document.getElementById("gamepad").style.display = 'none';
+        document.getElementById("settings").style.display = 'grid';
+      }
+      function closeSettings(){
+        document.getElementById("settings").style.display = 'none';
+        document.getElementById("gamepad").style.display = 'grid';
+      }
+    </script>
+
+    <script>
+
       class JoystickController {
         // stickID: ID of HTML element (representing joystick) that will be dragged
         // maxDistance: maximum amount joystick can move in any direction
@@ -690,7 +716,7 @@
       }
 
       function promptServerName() {
-        name = prompt("Give the base address of the server you wish to use:");
+        name = prompt("Give the base address of the server you wish to use:", brokerUri);
         name = "";
         if (name == "null" || !name) {
           name = "";
@@ -730,7 +756,7 @@
       }
 
       function promptChosenName() {
-        // name = prompt("Choose a name to identify your gamepad:");  // TODO: Turn this off temporarily when testing
+        name = prompt("Choose a name to identify your gamepad:", chosenName);  // TODO: Turn this off temporarily when testing
         if (name == "null" || !name) {
           name = "";
         }
