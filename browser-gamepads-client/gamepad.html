@@ -15,7 +15,6 @@
     Remote Browser Gamepad.
     <hr />
     <div class="status-text" style="display: none">
-      <div id="status">Nothing to see here.</div>
       <div id="status1" style="color: red">Joystick 1</div>
       <div id="status2" style="color: blue">Joystick 2</div>
       <div id="button1">Button 1</div>
@@ -44,16 +43,16 @@
       <div id="gamepad-data">gamepad data</div>
     </div>
 
-    <div id="settings" style="display:none;">
+    <div id="settings" style="display: none">
       <button onclick="closeSettings()">Close Settings</button>
       <hr />
       <button onclick="promptChosenName()">Set your Chosen Name</button>
       <button onclick="promptServerName()">Change Server name</button>
       <hr />
       <button onclick="setupWebSocket()">Connect to Server</button>
+      <p id="status">Nothing to see here.</p>
       <hr />
     </div>
-
 
     <div id="gamepad" class="gamepad-container">
       <div class="gamepad-group-leftstick">
@@ -82,28 +81,28 @@
         <div class="cardinal-container">
           <button
             class="bg-green text-white circular-shape cardinal-south"
-            style="display:block; margin-left:auto; margin-right:auto;"
+            style="display: block; margin-left: auto; margin-right: auto"
             id="button-a"
           >
             A
           </button>
           <button
             class="bg-red text-white circular-shape cardinal-east"
-            style="display:block; margin-right:auto;"
+            style="display: block; margin-right: auto"
             id="button-b"
           >
             B
           </button>
           <button
             class="bg-blue text-white circular-shape cardinal-west"
-            style="display:block; margin-left:auto;"
+            style="display: block; margin-left: auto"
             id="button-x"
           >
             X
           </button>
           <button
             class="bg-yellow circular-shape cardinal-north"
-            style="display:block; margin-left:auto; margin-right:auto;"
+            style="display: block; margin-left: auto; margin-right: auto"
             id="button-y"
           >
             Y
@@ -112,19 +111,35 @@
         <br />
       </div>
       <div class="gamepad-group-leftshoulder">
-        <button class="bg-grey rectangular-shape" style="float:left;" id="button-lb">
+        <button
+          class="bg-grey rectangular-shape"
+          style="float: left"
+          id="button-lb"
+        >
           LB
         </button>
-        <button class="bg-grey rectangular-shape" style="float:left" id="button-lt">
+        <button
+          class="bg-grey rectangular-shape"
+          style="float: left"
+          id="button-lt"
+        >
           LT
         </button>
         <br />
       </div>
       <div class="gamepad-group-rightshoulder">
-        <button class="bg-grey rectangular-shape" style="float:right;" id="button-rb">
+        <button
+          class="bg-grey rectangular-shape"
+          style="float: right"
+          id="button-rb"
+        >
           RB
         </button>
-        <button class="bg-grey rectangular-shape" style="float:right;" id="button-rt">
+        <button
+          class="bg-grey rectangular-shape"
+          style="float: right"
+          id="button-rt"
+        >
           RT
         </button>
         <br />
@@ -154,7 +169,7 @@
           </button>
           <button
             class="bg-grey square-shape cardinal-west"
-            style="margin-left: auto;"
+            style="margin-left: auto"
             id="dpad_left"
           >
             LFT
@@ -206,9 +221,27 @@
         </div>
       </div>
       <div class="gamepad-group-status">
-        <button style="display:block; margin-left:auto; margin-right:auto" onclick="openSettings()">
+        <button
+          style="display: block; margin-left: auto; margin-right: auto"
+          onclick="openSettings()"
+        >
           settings
         </button>
+        <label
+          for="update-speed"
+          style="display: block; margin-left: auto; margin-right: auto"
+        >
+          Set update speed:
+          <input
+            name="update-speed"
+            type="range"
+            min="1"
+            max="5"
+            value="5"
+            id="update-speed"
+            onchange="updateSpeed = parseInt(event.target.value)"
+          />
+        </label>
       </div>
     </div>
 
@@ -344,25 +377,43 @@
     </style>
 
     <script>
-      function openSettings(){
-        document.getElementById("gamepad").style.display = 'none';
-        document.getElementById("settings").style.display = 'grid';
+      function openSettings() {
+        isKeyboardListeningActive = false;
+        document.getElementById("gamepad").style.display = "none";
+        document.getElementById("settings").style.display = "grid";
       }
-      function closeSettings(){
-        document.getElementById("settings").style.display = 'none';
-        document.getElementById("gamepad").style.display = 'grid';
+      function closeSettings() {
+        isKeyboardListeningActive = true;
+        document.getElementById("settings").style.display = "none";
+        document.getElementById("gamepad").style.display = "grid";
       }
     </script>
 
     <script>
-
+      let isKeyboardListeningActive = true;
+      let updateSpeed = 5;
       class JoystickController {
         // stickID: ID of HTML element (representing joystick) that will be dragged
         // maxDistance: maximum amount joystick can move in any direction
         // deadzone: joystick must move at least this amount from origin to register value change
-        constructor(stickID, maxDistance, deadzone) {
+        constructor(
+          stickID,
+          maxDistance,
+          deadzone,
+          keyCodeNorth,
+          keyCodeSouth,
+          keyCodeEast,
+          keyCodeWest
+        ) {
           this.id = stickID;
           let stick = document.getElementById(stickID);
+          this.stick = stick;
+
+          // Keys for keyboard press control:
+          this.keyCodeNorth = Array.isArray(keyCodeNorth) ? keyCodeNorth : [keyCodeNorth];
+          this.keyCodeSouth = Array.isArray(keyCodeSouth) ? keyCodeSouth : [keyCodeSouth];
+          this.keyCodeEast = Array.isArray(keyCodeEast) ? keyCodeEast : [keyCodeEast];
+          this.keyCodeWest = Array.isArray(keyCodeWest) ? keyCodeWest : [keyCodeWest];
 
           // location from which drag begins, used to calculate offsets
           this.dragStart = null;
@@ -399,7 +450,7 @@
           }
 
           this.updateIndex = 0;
-          this.updateInterval = 10;
+          // this.updateInterval = updateSpeed;
           function handleMove(event) {
             if (!self.active) return;
 
@@ -431,16 +482,7 @@
               Math.min(maxDistance, Math.abs(yDiff)) * Math.sign(yDiff)
             );
 
-            // move stick image to new position
-            stick.style.transform = `translate3d(${xPosition0}px, ${yPosition0}px, 0px)`;
-
-            self.value = { x: xPosition0, y: yPosition0 };
-
-            self.updateIndex++;
-            if (self.updateIndex >= self.updateInterval) {
-              sendGamepadData();
-              self.updateIndex = 0;
-            }
+            self.setValue(xPosition0, yPosition0);
           }
 
           function handleUp(event) {
@@ -464,6 +506,68 @@
             sendGamepadData();
           }
 
+          self.isPressedNorth = false;
+          self.isPressedSouth = false;
+          self.isPressedEast = false;
+          self.isPressedWest = false;
+          function keyDown(event) {
+            if (!isKeyboardListeningActive || event.isComposing || event.keyCode === 229) {
+              return; // Deal with composing, Firefox
+            }
+            
+            let newX = self.value.x;
+            let newY = self.value.y;
+
+            if (self.keyCodeNorth.includes(event.code) && !self.isPressedNorth) {
+              self.isPressedNorth = true;
+              newY = -maxDistance;
+            }
+            if (self.keyCodeSouth.includes(event.code) && !self.isPressedSouth) {
+              self.isPressedSouth = true;
+              newY = maxDistance;
+            }
+
+            if (self.keyCodeEast.includes(event.code) && !self.isPressedEast) {
+              self.isPressedEast = true;
+              newX = maxDistance;
+            }
+
+            if (self.keyCodeWest.includes(event.code) && !self.isPressedWest) {
+              self.isPressedWest = true;
+              newX = -maxDistance;
+            }
+
+            self.setValue(newX, newY, false);
+          }
+          function keyUp(event) {
+            if ( !isKeyboardListeningActive || event.isComposing || event.keyCode === 229) {
+              return; // Deal with composing, Firefox
+            }
+            let newX = self.value.x;
+            let newY = self.value.y;
+
+            if (self.keyCodeNorth.includes(event.code) && self.isPressedNorth) {
+              self.isPressedNorth = false;
+              newY = 0;
+            }
+            if (self.keyCodeSouth.includes(event.code) && self.isPressedSouth) {
+              self.isPressedSouth = false;
+              newY = 0;
+            }
+
+            if (self.keyCodeEast.includes(event.code) && self.isPressedEast) {
+              self.isPressedEast = false;
+              newX = 0;
+            }
+
+            if (self.keyCodeWest.includes(event.code) && self.isPressedWest) {
+              self.isPressedWest = false;
+              newX = 0;
+            }
+
+            self.setValue(newX, newY, false);
+          }
+
           stick.addEventListener("mousedown", handleDown);
           stick.addEventListener("touchstart", handleDown);
           document.addEventListener("mousemove", handleMove, {
@@ -474,14 +578,44 @@
           });
           document.addEventListener("mouseup", handleUp);
           document.addEventListener("touchend", handleUp);
+          document.addEventListener("keydown", keyDown);
+          document.addEventListener("keyup", keyUp);
+        }
+
+        setValue(xPos, yPos, withInterval = true) {
+          // move stick image to new position
+          this.value = { x: xPos, y: yPos };
+          this.updateIndex++;
+          if (!withInterval || this.updateIndex >= updateSpeed) {
+            this.stick.style.transform = `translate3d(${xPos}px, ${yPos}px, 0px)`;
+            sendGamepadData();
+            this.updateIndex = 0;
+          }
         }
       }
 
-      let joystick1 = new JoystickController("stick1", 64, 8);
-      let joystick2 = new JoystickController("stick2", 64, 8);
+      let joystick1 = new JoystickController(
+        "stick1",
+        64,
+        8,
+        "KeyW",
+        "KeyS",
+        "KeyD",
+        "KeyA"
+      );
+      let joystick2 = new JoystickController(
+        "stick2",
+        64,
+        8,
+        ["KeyH", "Numpad8"],
+        ["KeyN", "Numpad2"],
+        ["KeyM", "Numpad6"],
+        ["KeyB", "Numpad4"]
+      );
 
       class ButtonController {
-        constructor(buttonID, inactiveStyle, activeStyle) {
+        constructor(buttonID, inactiveStyle, activeStyle, validKeyCodes) {
+          this.validKeyCodes = Array.isArray(validKeyCodes) ? validKeyCodes : [validKeyCodes];
           this.activeStyle = activeStyle;
           this.inactiveStyle = inactiveStyle;
 
@@ -493,15 +627,15 @@
           this.touchId = null;
           let self = this;
           function handleDown(event) {
-            self.active = true;
-            self.setActiveStyle();
+            self.setValue(true);
+            // self.active = true;
+            // sendGamepadData();
+            // self.setActiveStyle();
             event.preventDefault();
 
             // if this is a touch event, keep track of which one
             if (event.changedTouches)
               self.touchId = event.changedTouches[0].identifier;
-
-            sendGamepadData();
           }
           function handleUp(event) {
             if (!self.active) return;
@@ -513,14 +647,35 @@
             )
               return;
             self.touchId = null;
-            self.active = false;
-            self.setInactiveStyle();
-            sendGamepadData();
+            self.setValue(false);
+            // self.active = false; // TODO: Remove these lines
+            // self.setInactiveStyle();
+            // sendGamepadData();
           }
+
+          function keyDown(event) {
+            if ( !isKeyboardListeningActive || event.isComposing || event.keyCode === 229) {
+              return; // Deal with composing, Firefox
+            }
+            if (!self.isActive() && self.validKeyCodes.includes(event.code)) {
+              self.setValue(true);
+            }
+          }
+          function keyUp(event) {
+            if ( !isKeyboardListeningActive || event.isComposing || event.keyCode === 229) {
+              return; // Deal with composing, Firefox
+            }
+            if (self.isActive && self.validKeyCodes.includes(event.code)) {
+              self.setValue(false);
+            }
+          }
+
           button.addEventListener("mousedown", handleDown);
           button.addEventListener("touchstart", handleDown);
           document.addEventListener("mouseup", handleUp);
           document.addEventListener("touchend", handleUp);
+          document.addEventListener("keydown", keyDown);
+          document.addEventListener("keyup", keyUp);
         }
 
         setActiveStyle() {
@@ -533,6 +688,17 @@
           this.button.classList.add(this.inactiveStyle);
         }
 
+        setValue(isPressedDown) {
+          if (isPressedDown) {
+            this.active = true;
+            this.setActiveStyle();
+          } else {
+            this.active = false;
+            this.setInactiveStyle();
+          }
+          sendGamepadData();
+        }
+
         isActive() {
           return this.active;
         }
@@ -541,87 +707,108 @@
       let button1 = new ButtonController(
         "button-a",
         "bg-green",
-        "bg-green-active"
+        "bg-green-active",
+        ["KeyK", "Space"]
       );
-      let button2 = new ButtonController("button-b", "bg-red", "bg-red-active");
+      let button2 = new ButtonController(
+        "button-b",
+        "bg-red",
+        "bg-red-active",
+        ["KeyL","Numpad0"]
+      );
       let button3 = new ButtonController(
         "button-x",
         "bg-blue",
-        "bg-blue-active"
+        "bg-blue-active",
+        ["KeyJ"]
       );
       let button4 = new ButtonController(
         "button-y",
         "bg-yellow",
-        "bg-yellow-active"
+        "bg-yellow-active",
+        ["KeyI"]
       );
 
       let button5 = new ButtonController(
         "button-lb",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["KeyQ"]
       );
       let button6 = new ButtonController(
         "button-lt",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["KeyE"]
       );
       let button7 = new ButtonController(
         "button-rb",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["KeyO", "Numpad9"]
       );
       let button8 = new ButtonController(
         "button-rt",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["KeyU", "Numpad7"]
       );
 
       let button9 = new ButtonController(
         "button-left-stick",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["ShiftLeft", "ShiftRight"]
       );
       let button10 = new ButtonController(
         "button-right-stick",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["ControlLeft", "ControlRight", "Numpad5"]
       );
 
       let button11 = new ButtonController(
         "button-back",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["Digit0"]
       );
       let button12 = new ButtonController(
         "button-start",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["Enter"]
       );
       let button13 = new ButtonController(
         "button-guide",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["Delete"]
       );
 
       let dpad_up = new ButtonController(
         "dpad_up",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["ArrowUp","Digit1"]
       );
       let dpad_down = new ButtonController(
         "dpad_down",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["ArrowDown","Digit2"]
       );
       let dpad_right = new ButtonController(
         "dpad_right",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["ArrowRight","Digit3"]
       );
       let dpad_left = new ButtonController(
         "dpad_left",
         "bg-grey",
-        "bg-grey-active"
+        "bg-grey-active",
+        ["ArrowLeft","Digit4"]
       );
 
       let data = {};
@@ -716,8 +903,10 @@
       }
 
       function promptServerName() {
-        name = prompt("Give the base address of the server you wish to use:", brokerUri);
-        name = "";
+        name = prompt(
+          "Give the base address of the server you wish to use:",
+          brokerUri
+        );
         if (name == "null" || !name) {
           name = "";
         } else {
@@ -756,7 +945,7 @@
       }
 
       function promptChosenName() {
-        name = prompt("Choose a name to identify your gamepad:", chosenName);  // TODO: Turn this off temporarily when testing
+        name = prompt("Choose a name to identify your gamepad:", chosenName); // TODO: Turn this off temporarily when testing
         if (name == "null" || !name) {
           name = "";
         }

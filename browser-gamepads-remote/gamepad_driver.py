@@ -28,11 +28,33 @@ BUTTONS = {
     'gb':11,# center guide button
 }
 
+POV = {
+
+}
+
 def flt_to_vjoy(flt_value): # 0x8000 = 32768
     return int(flt_value * 0x8000)
 
 def vjoy_to_flt(vjoy_value): # 0x8000 = 32768
     return vjoy_value / 0x8000
+
+POV_DEADZONE = 0.1
+_INTERNAL_POV_DEADZONE = int(POV_DEADZONE * 0x8000)
+def update_pov(joystick, data):
+    dead = _INTERNAL_POV_DEADZONE
+    if 'hx' in data:
+        dpad_x = data['hx'] # (0 to 0x8000) -> (-1 to +1)
+        dpad_x = 1 if dpad_x > 0x4000 + dead else -1 if dpad_x < 0x4000 - dead else 0
+        
+        # TODO: set pov to dpad_x values
+        # For right use (True if dpad_x == 1 else False)
+        # For left use (True if dpad_x == -1 else False)
+    if 'hy' in data:
+        dpad_y = data['hy']
+        dpad_y = 1 if dpad_y > 0x4000 + dead else -1 if dpad_y < 0x4000 - dead else 0
+        # TODO: set pov to dpad_y values
+        # For up use (True if dpad_x == 1 else False)
+        # For down use (True if dpad_x == -1 else False)
 
 def update_vjoy(stick_num, data):
     j = pyvjoy.VJoyDevice(stick_num)
@@ -43,6 +65,8 @@ def update_vjoy(stick_num, data):
             j.set_axis(AXES[key], value)
         if key in BUTTONS:
             j.set_button(BUTTONS[key], value)
+    update_pov(j, data)
+
 
 DEFAULT_VALUES = {
     'lx': 0x4000,
